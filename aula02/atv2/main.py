@@ -1,28 +1,26 @@
-alunos = []
-disciplinas = set()
+alunos = [] 
+disciplinas = set() 
 turma = ("DSM3", 2026)
 
 opcao = 0
 
-print("Sistema de Cadastro de Alunos")
-
 while opcao != 8:
+    
+    print("Sistema de Cadastro de Alunos")
+    print("1 - Cadastrar Aluno\n2 - Listar Alunos\n3 - Registrar Notas\n4 - Calcular a Média\n5 - Cadastrar Disciplinas\n6 - Listar Disciplinas\n7 - Informar dados da turma\n8 - Sair")
 
-    print("\n1 - Cadastrar Aluno")
-    print("2 - Listar Alunos")
-    print("3 - Registrar Notas")
-    print("4 - Calcular a Média")
-    print("5 - Cadastrar Disciplinas")
-    print("6 - Listar Disciplinas")
-    print("7 - Informar dados da turma")
-    print("8 - Sair")
 
     opcao = int(input("Escolha uma opção: "))
-
+    print("")
+     
     if opcao == 1:
         nome = input("Digite o nome do aluno: ")
-        idade = input("Digite a idade do aluno: ")
-        cidade = input("Digite a cidade do aluno: ")
+
+        if any(aluno["nome"].lower() == nome.lower() for aluno in alunos):
+            print("Já existe um aluno cadastrado com esse nome!\n")
+        else:
+            idade = input("Digite a idade do aluno: ")
+            cidade = input("Digite a cidade do aluno: ")
 
         aluno = {
             "nome": nome,
@@ -38,16 +36,16 @@ while opcao != 8:
         if len(alunos) == 0:
             print("Nenhum aluno cadastrado.\n")
         else:
-            print("\nLista de Alunos:")
+            print("Lista de Alunos:")
             for aluno in alunos:
                 print("Nome:", aluno["nome"])
                 print("Idade:", aluno["idade"])
                 print("Cidade:", aluno["cidade"])
 
                 if len(aluno["notas"]) > 0:
-                    print("Notas:", aluno["notas"])
+                    print("Notas:", aluno["notas"],"\n")
                 else:
-                    print("Notas: Nenhuma registrada")
+                    print("Notas: Nenhuma registrada\n")
 
     elif opcao == 3:
         nome = input("Digite o nome do aluno: ")
@@ -93,19 +91,24 @@ while opcao != 8:
 
     elif opcao == 5:
         disciplina = input("Digite o nome da disciplina: ")
-        disciplinas.add(disciplina)
-        print("Disciplina cadastrada com sucesso!\n")
+
+        if disciplina in disciplinas:
+                print("Essa disciplina já está cadastrada!\n")
+        else:
+            disciplinas.add(disciplina)
+            print("Disciplina cadastrada com sucesso!\n")
 
     elif opcao == 6:
         if len(disciplinas) > 0:
             print("\nDisciplinas cadastradas:")
             for disciplina in disciplinas:
                 print("-", disciplina)
+            print("")
         else:
             print("Nenhuma disciplina cadastrada.\n")
 
     elif opcao == 7:
-        print("\nDados da Turma")
+        print("Dados da Turma")
         print("Curso:", turma[0])
         print("Ano:", turma[1])
         print("Quantidade de alunos:", len(alunos))
@@ -114,8 +117,9 @@ while opcao != 8:
             print("Disciplinas:")
             for disciplina in disciplinas:
                 print(" - ", disciplina)
+            print()
         else:
-            print("Nenhuma disciplina cadastrada.")
+            print("Nenhuma disciplina cadastrada.\n")
 
     elif opcao == 8:
         print("Encerrando o programa...")
