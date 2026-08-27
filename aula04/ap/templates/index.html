@@ -1,11 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-   <p>Olá Mundo</p> 
-</body>
-</html>
+{% extends 'template.html' %}
+
+{% block titulo %} HOME {% endblock %}
+
+{%block conteudo %}
+<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro excepturi quaerat voluptate possimus omnis veritatis, cupiditate numquam fuga enim ut dolores odit at pariatur illo dicta nemo. Numquam, odit laudantium!</p>
+{% endblock %}
