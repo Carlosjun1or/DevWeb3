@@ -10,11 +10,11 @@
 </head>
 <body>
     <header>
-        <h1>Django</h1>
-        <nav>
+        <h1><a href="{% url 'index' %}">Django</a></h1>
+        <nav> 
             <a href="#">Quem somos</a>
             <a href="#">Produtos</a>
-            <a href="#">Serviços</a>
+            <a href="{% url 'servicos' %}">Serviços</a>
             <a href="#">Contato</a>
         </nav>
     </header>

@@ -1,0 +1,24 @@
+{% extends 'template.html' %}
+
+{% block titulo %} HOME {% endblock %}
+
+{%block conteudo %}
+
+    <h2>Serviços</h2>
+    <table border="1">
+        <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Preço</th>
+        </tr>
+
+        {% for servico in servicos %}
+        <tr>
+            <td>{{ servico.nome }}</td>
+            <td>{{ servico.descricao }}</td>
+            <td>{{ servico.preco }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
