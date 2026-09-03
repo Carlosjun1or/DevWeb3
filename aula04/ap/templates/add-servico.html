@@ -1,0 +1,16 @@
+{% extends 'template.html' %}
+
+{% block titulo %} Adicionar Serviço {% endblock %}
+
+{%block conteudo %}
+
+    <h2>Adicionar Serviço</h2>
+
+    <form action="{% url 'addServico' %}" method="POST">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Salvar">
+    </form>
+        
+
+{% endblock %}

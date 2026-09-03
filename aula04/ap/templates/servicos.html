@@ -1,6 +1,6 @@
 {% extends 'template.html' %}
 
-{% block titulo %} HOME {% endblock %}
+{% block titulo %} Serviços {% endblock %}
 
 {%block conteudo %}
 
@@ -10,6 +10,7 @@
             <th>Nome</th>
             <th>Descrição</th>
             <th>Preço</th>
+            <th>Ações</th>
         </tr>
 
         {% for servico in servicos %}
@@ -17,8 +18,12 @@
             <td>{{ servico.nome }}</td>
             <td>{{ servico.descricao }}</td>
             <td>{{ servico.preco }}</td>
+            <td>
+                <a href="{% url 'excluirServico' servico.id %}" style="color: red;">Excluir</a>
+            </td>
         </tr>
         {% endfor %}
     </table>
+    <p><a href="{% url 'addServico' %}" style="color: rgb(0, 74, 37);">Adicionar Serviço</a></p>
 
 {% endblock %}
