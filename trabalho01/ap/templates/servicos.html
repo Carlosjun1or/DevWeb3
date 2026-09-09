@@ -1,0 +1,53 @@
+{% extends 'template.html' %}
+
+{% load static %}
+
+{% block titulo %} Serviços {% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/servicos.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+    <h2 class="servicos-titulo">Serviços</h2>
+
+    <div class="tabela-servicos">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Preço</th>
+                    <th>Imagem</th>
+                    <th colspan="2">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for servico in servicos %}
+                <tr>
+                    <td>{{ servico.nome }}</td>
+                    <td>{{ servico.descricao }}</td>
+                    <td>R$ {{ servico.preco }}</td>
+                    <td>
+                        {% if servico.imagem %}
+                            <img src="{{ servico.imagem.url }}" alt="{{ servico.nome }}">
+                        {% else %}
+                            <span>Sem imagem</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'excluirServico' servico.id %}" class="btn btn-excluir">Excluir</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'editarServico' servico.id %}" class="btn btn-editar">Editar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="acao-adicionar">
+        <a href="{% url 'addServico' %}" class="btn btn-adicionar">Adicionar Serviço</a>
+    </div>
+{% endblock %}

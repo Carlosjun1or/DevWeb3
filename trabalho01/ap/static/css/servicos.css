@@ -1,0 +1,122 @@
+body {
+    background: #eeeeee;
+}
+
+.servicos-titulo {
+    text-align: center;
+    font-size: 2.3rem;
+    font-weight: 700;
+    margin: 15px 0 26px;
+    color: #212121;
+}
+
+.tabela-servicos {
+    max-width: 1100px;
+    margin: 0 auto;
+    border: 1px solid #d5d5d5;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #f3f3f3;
+}
+
+.tabela-servicos table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.tabela-servicos th,
+.tabela-servicos td {
+    border: 1px solid #d5d5d5;
+    padding: 14px 12px;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 1rem;
+    color: #222;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+}
+
+.tabela-servicos td:nth-child(2) {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+.tabela-servicos thead th {
+    background: #111111;
+    color: #ffffff;
+    font-weight: 700;
+    text-align: center;
+}
+
+.tabela-servicos tbody td {
+    background: #f9f9f9;
+}
+
+.tabela-servicos tbody td:last-child,
+.tabela-servicos tbody td:nth-last-child(2) {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.tabela-servicos tbody tr:nth-child(even) td {
+    background: #f1f1f1;
+}
+
+.tabela-servicos img {
+    display: block;
+    width: 100px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 82px;
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    color: #fff;
+    transition: opacity 0.2s ease;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn-excluir {
+    background: #e75c4a;
+}
+
+.btn-editar {
+    background: #2d7ae6;
+}
+
+.btn-adicionar {
+    background: #1d9d52;
+    padding: 0 22px;
+    height: 42px;
+    font-size: 1rem;
+}
+
+.acao-adicionar {
+    margin-top: 20px;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .tabela-servicos {
+        overflow-x: auto;
+    }
+
+    .tabela-servicos table {
+        min-width: 820px;
+    }
+}

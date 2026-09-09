@@ -1,0 +1,85 @@
+body {
+    background: #ececec;
+}
+
+.form-titulo {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 20px 0 24px;
+    color: #1d1d1d;
+}
+
+.form-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.servico-form {
+    width: 100%;
+    max-width: 520px;
+    background: #f3f3f3;
+    border: 1px solid #d8d8d8;
+    border-radius: 8px;
+    padding: 20px 18px 18px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
+}
+
+.campo label {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1e1e1e;
+    margin-bottom: 6px;
+}
+
+.campo input,
+.campo textarea,
+.campo select {
+    width: 100%;
+    border: 1px solid #d0d0d0;
+    background: #f8f8f8;
+    border-radius: 4px;
+    padding: 11px 12px;
+    font-size: 1rem;
+    color: #222;
+    box-sizing: border-box;
+}
+
+.campo textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.servico-form button {
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    background: #1b9a4b;
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    padding: 14px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.servico-form button:hover {
+    background: #168741;
+}
+
+@media (max-width: 560px) {
+    .servico-form {
+        max-width: 90%;
+    }
+
+    .form-titulo {
+        font-size: 1.8rem;
+    }
+}

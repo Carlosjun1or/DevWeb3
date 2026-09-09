@@ -1,0 +1,31 @@
+{% extends 'template.html' %}
+
+{% load static %}
+
+{% block titulo %} Produtos {% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/produtos.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+
+<h2 class="produtos-titulo">Nossos Produtos</h2>
+
+<div class="produtos-container">
+    {% for servico in servicos %}
+    <div class="produto-card">
+        {% if servico.imagem %}
+            <img src="{{ servico.imagem.url }}" alt="{{ servico.nome }}">
+        {% else %}
+            <div class="produto-imagem placeholder">
+                <span>Imagem</span>
+            </div>
+        {% endif %}
+        <h3>{{ servico.nome }}</h3>
+        <p>{{ servico.descricao }}</p>
+        <h4><strong>R$ {{ servico.preco|floatformat:2 }}</strong></h4>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

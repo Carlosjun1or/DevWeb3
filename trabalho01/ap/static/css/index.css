@@ -1,0 +1,39 @@
+.quem-somos {
+    max-width: 1000px;
+    margin: 40px auto 0;
+    padding: 30px 24px;
+    background: #f5f5f5;
+    border: 1px solid #d8d8d8;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.quem-somos-texto {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.quem-somos-texto h2 {
+    font-size: 2.2rem;
+    margin-bottom: 18px;
+    color: #1d1d1d;
+}
+
+.quem-somos-texto p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #333333;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 600px) {
+    .quem-somos {
+        margin: 24px 16px 0;
+        padding: 22px 18px;
+    }
+
+    .quem-somos-texto h2 {
+        font-size: 1.8rem;
+    }
+}

@@ -1,0 +1,30 @@
+{% extends 'template.html' %}
+
+{% load static %}
+
+{% block titulo %} Adicionar Serviço {% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/form-servico.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+
+    <h2 class="form-titulo">Adicionar Serviço</h2>
+
+    <div class="form-container">
+        <form action="{% url 'addServico' %}" method="POST" enctype="multipart/form-data" class="servico-form">
+            {% csrf_token %}
+
+            {% for field in form %}
+                <div class="campo">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+
+            <button type="submit">Salvar</button>
+        </form>
+    </div>
+
+{% endblock %}
