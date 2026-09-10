@@ -14,7 +14,7 @@ def servicos(request):
     return render (request, "servicos.html", {'servicos': servicos})
 
 def addServico(request):
-    form = FormServico(request.POST or None)
+    form = FormServico(request.POST or None, request.FILES or None)
     if request.method == "POST":
         if form.is_valid():
             form.save()
@@ -26,3 +26,13 @@ def excluirServico(request, id):
     servico = Servico.objects.get(id=id)
     servico.delete()
     return redirect('servicos')
+
+def editarServico(request, id):
+    servico = Servico.objects.get(id=id)
+    form = FormServico(request.POST or None, request.FILES or None, instance=servico)
+    if request.POST:
+        if form.is_valid():
+            form.save()
+            return redirect('servicos')
+
+    return render (request, "editar-servico.html", {'form': form})

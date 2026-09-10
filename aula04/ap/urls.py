@@ -6,4 +6,5 @@ urlpatterns = [
     path("servicos", views.servicos, name="servicos"),
     path("add-servico", views.addServico, name="addServico"),
     path("excluir-servico/<int:id>", views.excluirServico, name="excluirServico"),
+    path("editar-servico/<int:id>", views.editarServico, name="editarServico"),
 ]

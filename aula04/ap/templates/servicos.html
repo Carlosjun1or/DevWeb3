@@ -10,7 +10,8 @@
             <th>Nome</th>
             <th>Descrição</th>
             <th>Preço</th>
-            <th>Ações</th>
+            <th>Imagem</th>
+            <th colspan="2">Ações</th>
         </tr>
 
         {% for servico in servicos %}
@@ -19,7 +20,13 @@
             <td>{{ servico.descricao }}</td>
             <td>{{ servico.preco }}</td>
             <td>
+                <img src="media/{{ servico.imagem }}" alt="{{ servico.nome }}" width="100">
+            </td>
+            <td>
                 <a href="{% url 'excluirServico' servico.id %}" style="color: red;">Excluir</a>
+            </td>
+            <td>
+                <a href="{% url 'editarServico' servico.id %}" style="color: blue;">Editar</a>
             </td>
         </tr>
         {% endfor %}
