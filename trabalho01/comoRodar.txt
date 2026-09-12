@@ -1,0 +1,5 @@
+python -m venv venv *instala o venv dentro do seu projeto*
+venv\Scripts\activate *entra no venv \ inicia o venv*
+pip install django *dentro do venv voce instala o django*
+python -m pip install Pillow *dentro do venv voce instala o pillow*
+py manage.py runserver  *roda o sistema*
