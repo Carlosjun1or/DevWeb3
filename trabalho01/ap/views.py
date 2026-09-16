@@ -24,6 +24,7 @@ def addServico(request):
 
 def excluirServico(request, id):
     servico = Servico.objects.get(id=id)
+    servico.imagem.delete(save=False)
     servico.delete()
     return redirect('servicos')
 
