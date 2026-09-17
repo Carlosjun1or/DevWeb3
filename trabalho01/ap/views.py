@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from .models import Contato, Servico
+from .models import Contato, Servico, Categoria
 from .forms import FormContato, FormServico
 
 # Create your views here.
@@ -24,7 +24,32 @@ def servicos(request):
     busca = request.GET.get('busca')
     if busca:
         servicos = servicos.filter(nome__icontains=busca)
+        
+    #recupera as categorias ativas para exibir no filtro
+    categorias = Categoria.objects.filter(ativo=True)
     
+    #recupera o valor do filtro de categoria enviado pelo usuário
+    categoria = request.GET.get('categoria')
+    if categoria:
+        #aplica o filtro de categoria aos serviços
+        servicos = servicos.filter(categoria_id=categoria)
+        
+    preco = request.GET.get('preco')
+    if preco == 'baixo':
+        servicos = servicos.filter(preco__lte=50)
+    elif preco == 'medio':
+        servicos = servicos.filter(preco__gt=50, preco__lte=250)
+    elif preco == 'alto':
+        servicos = servicos.filter(preco__gt=250)
+    
+    ordem = request.GET.get('ordem')
+    if ordem == 'menor':
+        servicos = servicos.order_by('preco')
+    elif ordem == 'maior':
+        servicos = servicos.order_by('-preco')
+    elif ordem == 'nome':
+        servicos = servicos.order_by('nome')
+
     contexto = {
         'servicos': servicos,
         'total_servicos': total_servicos,
@@ -32,6 +57,10 @@ def servicos(request):
         'mais_barato': mais_barato,
         'mais_caro': mais_caro,
         'busca': busca,
+        'categoria': categoria,
+        'categorias': categorias,
+        'preco': preco,
+        'ordem' : ordem,
     }
         
     return render (request, "servicos.html", contexto)

@@ -26,7 +26,72 @@
             <p>Nenhum serviço encontrado.</p>
         {% endif %}
     </div>
+    <div class="filtros">
+        
+        <br>
+        <h4>Buscar por nome</h4>
+        <form method="GET">
+            <input type="text" name="busca" placeholder="Buscar por nome" value="{{busca|default:'' }}">
+            <button type="submit">Buscar</button>
+        </form>
+    
 
+        <br>
+        
+        <h4>filtrar por Categoria</h4>
+        {% for categoria_item in categorias %}
+            <a href="?categoria={{ categoria_item.id }}">
+                <button>{{ categoria_item.nome }}</button>
+            </a>
+        {% endfor %}   
+        
+        <br>
+        <br>
+    
+        <h4>filtrar por preço</h4>
+        <a href="?preco=baixo">
+            <button>Até R$50,00</button>
+        </a>
+        <a href="?preco=medio">
+            <button>Até R$250,00</button>
+        </a>
+
+        <a href="?preco=alto">
+            <button>Acima de 250,00</button>
+        </a>
+
+         <h4>filtrar por Categoria</h4>
+        {% for categoria_item in categorias %}
+            <a href="?categoria={{ categoria_item.id }}">
+                <button>{{ categoria_item.nome }}</button>
+            </a>
+        {% endfor %}   
+        
+        <br>
+        <br>
+    
+        <h4>Ordenar por preço</h4>
+        <a href="?ordem=menor">
+            <button>Ordenar por menor preço</button>
+        </a>
+        <a href="?ordem=maior">
+            <button>Ordenar por maior preço</button>
+        </a>
+
+        <a href="?ordem=nome">
+            <button>Ordenar por nome</button>
+        </a>
+
+         <br>
+        <br>
+    
+        <h4>Limpar Filtros</h4>
+        <a href="{% url 'servicos' %}">
+            <button>Limpar Filtros</button>
+        </a>
+
+    </div>
+    <br>
     <div class="tabela-servicos">
         <table>
             <thead>
@@ -35,6 +100,7 @@
                     <th>Descrição</th>
                     <th>Preço</th>
                     <th>Imagem</th>
+                    <th>Categoria</th>
                     <th colspan="2">Ações</th>
                 </tr>
             </thead>
@@ -52,6 +118,9 @@
                         {% endif %}
                     </td>
                     <td>
+                        {{ servico.categoria }}
+                    </td>
+                    <td>
                         <a href="{% url 'excluirServico' servico.id %}" class="btn btn-excluir">Excluir</a>
                     </td>
                     <td>
@@ -67,10 +136,5 @@
         <a href="{% url 'addServico' %}" class="btn btn-adicionar">Adicionar Serviço</a>
     </div>
 
-    <div class="busca">
-        <form method="GET">
-            <input type="text" name="busca" placeholder="Buscar por nome" value="{{busca|default:'' }}">
-            <button type="submit">Buscar</button>
-        </form>
-    </div>
+
 {% endblock %}
