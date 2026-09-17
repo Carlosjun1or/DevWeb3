@@ -4,7 +4,7 @@ from .models import Contato, Servico
 class FormServico(forms.ModelForm):
     class Meta:
         model = Servico
-        fields = ("nome", "descricao", "preco", "imagem", "ativo")
+        fields = ("nome", "descricao", "preco", "imagem", "ativo", "categoria")
         
 class FormContato(forms.ModelForm):
     class Meta:

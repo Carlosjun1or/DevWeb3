@@ -11,6 +11,22 @@
 {% block conteudo %}
     <h2 class="servicos-titulo">Serviços</h2>
 
+    <div class="mensagem-sucesso">
+        {% if tem_servicos %}
+            <p>{{ total_servicos }} serviço(s) encontrado(s).</p>
+
+            {% if mais_barato %}
+                <p>O serviço mais barato é: {{ mais_barato.nome }} : R$ {{ mais_barato.preco }}</p>
+            {% endif %}
+
+            {% if mais_caro %}
+                <p>O serviço mais caro é: {{ mais_caro.nome }} : R$ {{ mais_caro.preco }}</p>
+            {% endif %}
+        {% else %}
+            <p>Nenhum serviço encontrado.</p>
+        {% endif %}
+    </div>
+
     <div class="tabela-servicos">
         <table>
             <thead>
@@ -49,5 +65,12 @@
 
     <div class="acao-adicionar">
         <a href="{% url 'addServico' %}" class="btn btn-adicionar">Adicionar Serviço</a>
+    </div>
+
+    <div class="busca">
+        <form method="GET">
+            <input type="text" name="busca" placeholder="Buscar por nome" value="{{busca|default:'' }}">
+            <button type="submit">Buscar</button>
+        </form>
     </div>
 {% endblock %}

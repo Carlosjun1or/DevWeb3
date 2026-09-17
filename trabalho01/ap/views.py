@@ -9,9 +9,32 @@ def index(request):
 
 def servicos(request):
     
-    servicos = Servico.objects.all()
+    ## servicos = Servico.objects.all()
+    servicos = Servico.objects.filter(ativo=True)
+    servicos = servicos.exclude(preco=0)   
+     
+    total_servicos = servicos.count()
+    tem_servicos = servicos.exists()
+    
+    mais_barato = servicos.order_by('preco').first()
+    mais_caro = servicos.order_by('-preco').first()
+    
+    
+    #recupera o valor do formulário de busca enviado pelo usuário
+    busca = request.GET.get('busca')
+    if busca:
+        servicos = servicos.filter(nome__icontains=busca)
+    
+    contexto = {
+        'servicos': servicos,
+        'total_servicos': total_servicos,
+        'tem_servicos': tem_servicos,
+        'mais_barato': mais_barato,
+        'mais_caro': mais_caro,
+        'busca': busca,
+    }
         
-    return render (request, "servicos.html", {'servicos': servicos})
+    return render (request, "servicos.html", contexto)
 
 def addServico(request):
     form = FormServico(request.POST or None, request.FILES or None)
