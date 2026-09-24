@@ -1,0 +1,34 @@
+.page-heading { align-items: end; display: flex; justify-content: space-between; margin-bottom: 30px; }
+.filters {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1.3fr 1fr 1fr 1.1fr 1fr;
+    margin-bottom: 30px;
+    padding: 16px;
+}
+.filters .filter-city { grid-column: span 4; }
+.filters .filter-clear { grid-column: span 1; }
+.cards-grid { display: grid; gap: 22px; grid-template-columns: repeat(3, 1fr); }
+.property-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; transition: box-shadow .2s, transform .2s; }
+.property-card:hover { box-shadow: 0 24px 55px rgba(29, 40, 50, .15); transform: translateY(-4px); }
+.property-card > img, .image-placeholder { background: #e8e1d6; display: block; height: 195px; object-fit: cover; text-align: center; width: 100%; }
+.image-placeholder { color: #998f83; padding-top: 85px; }
+.card-content { padding: 19px; }
+.card-content h3 { font-size: 19px; letter-spacing: -.02em; margin: 0 0 9px; }
+.price { color: var(--accent-dark); display: block; font-size: 17px; font-weight: 800; margin-bottom: 10px; }
+.muted { color: var(--muted); margin: 6px 0; }
+.card-actions { display: flex; gap: 9px; margin-top: 18px; }
+.card-actions .btn { flex: 1; font-size: 12px; padding: 9px; }
+.empty-state { background: var(--surface); border: 1px dashed #cfcac0; border-radius: 12px; color: var(--muted); grid-column: 1 / -1; padding: 40px; text-align: center; }
+@media (max-width: 900px) { .cards-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 800px) {
+    .page-heading { align-items: flex-start; flex-direction: column; gap: 16px; }
+    .filters { grid-template-columns: 1fr 1fr; }
+    .filters .filter-city { grid-column: span 2; }
+    .filters .filter-clear { grid-column: span 1; }
+}
+@media (max-width: 560px) { .cards-grid, .filters { grid-template-columns: 1fr; } .filters .filter-city { grid-column: auto; } }

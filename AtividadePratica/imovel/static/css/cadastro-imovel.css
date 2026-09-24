@@ -1,0 +1,12 @@
+.form-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); margin: 0 auto; max-width: 700px; padding: 34px; }
+.form-card h2 { margin-bottom: 28px; }
+.field-group { margin-bottom: 20px; }
+.field-group label { display: block; font-size: 13px; font-weight: 750; margin-bottom: 7px; }
+.field-group input, .field-group select, .field-group textarea { display: block; }
+.form-card textarea { min-height: 115px; resize: vertical; }
+.field-help { color: var(--muted); display: block; font-size: 12px; line-height: 1.4; margin-top: 7px; }
+.field-error { color: #bf4c48; display: block; font-size: 12px; line-height: 1.4; margin-top: 7px; }
+.has-error input, .has-error select, .has-error textarea { border-color: #bf4c48; }
+.form-card ul.errorlist { color: #bf4c48; font-size: 12px; margin: 0 0 15px; padding-left: 18px; }
+.form-actions { border-top: 1px solid var(--line); display: flex; gap: 10px; justify-content: flex-end; margin-top: 30px; padding-top: 24px; }
+@media (max-width: 600px) { .form-card { padding: 24px 20px; } .form-actions { flex-direction: column-reverse; } .form-actions .btn { width: 100%; } }

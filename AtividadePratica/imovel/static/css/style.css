@@ -1,0 +1,109 @@
+:root {
+    --ink: #17212b;
+    --muted: #718096;
+    --paper: #fbfaf7;
+    --surface: #ffffff;
+    --line: #e8e6df;
+    --accent: #d96c4f;
+    --accent-dark: #b84f36;
+    --navy: #18232e;
+    --shadow: 0 18px 45px rgba(29, 40, 50, .09);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 15px/1.6 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    margin: 0;
+}
+a { color: inherit; text-decoration: none; }
+header {
+    align-items: center;
+    background: var(--navy);
+    color: #fff;
+    display: flex;
+    gap: 34px;
+    min-height: 82px;
+    padding: 0 max(24px, calc((100% - 1180px) / 2));
+}
+.brand-link { margin-right: 15px; }
+.brand { align-items: center; display: flex; gap: 11px; }
+.brand::before {
+    background: var(--accent);
+    border-radius: 8px 8px 8px 2px;
+    content: "";
+    display: block;
+    height: 25px;
+    transform: rotate(-8deg);
+    width: 25px;
+}
+.brand h1 { font-size: 20px; font-weight: 750; letter-spacing: -.03em; margin: 0; }
+nav { display: flex; gap: 25px; margin-right: auto; }
+nav a { color: #cbd5df; font-size: 14px; font-weight: 600; padding: 28px 0 25px; position: relative; }
+nav a:hover { color: #fff; }
+nav a:hover::after { background: var(--accent); bottom: 17px; content: ""; height: 2px; left: 0; position: absolute; right: 0; }
+.header-buttons { display: flex; gap: 9px; }
+main { margin: 0 auto; max-width: 1180px; min-height: calc(100vh - 145px); padding: 54px 24px 80px; }
+footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; padding: 22px; text-align: center; }
+h2 { font-size: clamp(27px, 3vw, 38px); letter-spacing: -.05em; line-height: 1.1; margin: 4px 0 0; }
+.eyebrow { color: var(--accent); font-size: 11px; font-weight: 800; letter-spacing: .14em; margin: 0; text-transform: uppercase; }
+.btn {
+    border: 1px solid transparent;
+    border-radius: 7px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 11px 17px;
+    text-align: center;
+    transition: background .2s, border-color .2s, transform .2s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-light { background: #fff; color: var(--navy); }
+.btn-light:hover { background: #f2eee8; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-dark); }
+.btn-secondary { background: #f0efeb; color: var(--ink); }
+.btn-warning { background: #e9a52f; color: #fff; }
+.btn-danger { background: #bf4c48; color: #fff; }
+input, select, textarea {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    color: var(--ink);
+    font: inherit;
+    padding: 12px 13px;
+    width: 100%;
+}
+input::placeholder, textarea::placeholder { color: #a5adb5; }
+input[type="search"]::-webkit-search-cancel-button {
+    cursor: pointer;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(217, 108, 79, .12); outline: 0; }
+.modal-backdrop { align-items: center; background: rgba(24, 35, 46, .72); display: flex; inset: 0; justify-content: center; padding: 20px; position: fixed; z-index: 10; }
+.modal-backdrop[hidden] { display: none; }
+.confirmation-modal { background: var(--surface); border-radius: 14px; box-shadow: 0 25px 70px rgba(0, 0, 0, .2); max-width: 460px; padding: 36px; position: relative; text-align: center; width: 100%; }
+.confirmation-modal h2 { font-size: 27px; margin: 0 0 14px; }
+.confirmation-modal p { color: var(--muted); margin: 8px 0; }
+.confirmation-modal .modal-warning { font-size: 13px; }
+.confirmation-modal strong { color: var(--ink); }
+.modal-close { background: transparent; border: 0; color: var(--muted); cursor: pointer; font-size: 25px; line-height: 1; padding: 4px 8px; position: absolute; right: 12px; top: 10px; }
+.modal-close:hover { color: var(--ink); }
+.modal-actions { display: flex; gap: 12px; justify-content: center; margin-top: 26px; }
+.modal-actions .btn { min-width: 150px; }
+@media (max-width: 800px) {
+    header { align-items: flex-start; flex-wrap: wrap; gap: 18px; padding: 18px 24px; }
+    nav { order: 3; width: 100%; }
+    nav a { padding: 0 0 4px; }
+    nav a:hover::after { bottom: 0; }
+    .header-buttons { margin-left: auto; }
+}
+@media (max-width: 520px) {
+    .header-buttons { flex-direction: column; }
+    main { padding: 36px 16px 60px; }
+    .confirmation-modal { padding: 28px 20px; }
+    .modal-actions { flex-direction: column-reverse; }
+    .modal-actions .btn { width: 100%; }
+}

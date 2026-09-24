@@ -1,0 +1,11 @@
+.form-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); margin: 30px auto 0; max-width: 570px; padding: 36px; }
+.form-card h2 { margin-bottom: 28px; }
+.field-group { margin-bottom: 21px; }
+.field-group label { display: block; font-size: 13px; font-weight: 750; margin-bottom: 7px; }
+.field-group input { display: block; }
+.field-help { color: var(--muted); display: block; font-size: 12px; line-height: 1.4; margin-top: 7px; }
+.field-error { color: #bf4c48; display: block; font-size: 12px; line-height: 1.4; margin-top: 7px; }
+.has-error input { border-color: #bf4c48; }
+.form-card ul.errorlist { color: #bf4c48; font-size: 12px; margin: 0 0 15px; padding-left: 18px; }
+.form-actions { border-top: 1px solid var(--line); display: flex; gap: 10px; justify-content: flex-end; margin-top: 30px; padding-top: 24px; }
+@media (max-width: 600px) { .form-card { margin-top: 0; padding: 26px 20px; } .form-actions { flex-direction: column-reverse; } .form-actions .btn { width: 100%; } }

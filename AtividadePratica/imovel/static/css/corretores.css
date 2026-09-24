@@ -1,0 +1,23 @@
+.page-heading { align-items: end; display: flex; justify-content: space-between; margin-bottom: 30px; }
+.agent-filters { align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); display: flex; gap: 10px; margin-bottom: 30px; padding: 16px; }
+.agent-filters input { flex: 1; }
+.agent-filters .btn { white-space: nowrap; }
+.sr-only { clip: rect(0, 0, 0, 0); clip-path: inset(50%); height: 1px; overflow: hidden; position: absolute; white-space: nowrap; width: 1px; }
+.agents-grid { display: grid; gap: 22px; grid-template-columns: repeat(2, 1fr); }
+.agent-card { align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); display: grid; gap: 17px; grid-template-columns: auto 1fr; padding: 24px; transition: box-shadow .2s, transform .2s; }
+.agent-card:hover { box-shadow: 0 24px 55px rgba(29, 40, 50, .14); transform: translateY(-3px); }
+.agent-card h3 { font-size: 19px; letter-spacing: -.02em; margin: 0 0 8px; }
+.agent-card .card-actions { grid-column: 1 / -1; width: 100%; }
+.agent-avatar { align-items: center; background: #f4ded5; border: 5px solid #fbede8; border-radius: 50%; color: var(--accent-dark); display: flex; font-size: 23px; font-weight: 800; height: 66px; justify-content: center; width: 66px; }
+.muted { color: var(--muted); margin: 6px 0; }
+.card-actions { display: flex; gap: 9px; margin-top: 15px; }
+.card-actions .btn { flex: 1; font-size: 12px; padding: 9px; }
+.empty-state { background: var(--surface); border: 1px dashed #cfcac0; border-radius: 12px; color: var(--muted); grid-column: 1 / -1; padding: 40px; text-align: center; }
+@media (max-width: 800px) {
+    .page-heading { align-items: flex-start; flex-direction: column; gap: 16px; }
+    .agent-filters { align-items: stretch; flex-wrap: wrap; }
+    .agent-filters input { flex-basis: 100%; }
+    .agent-filters .btn { flex: 1; }
+    .agents-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) { .agent-filters { flex-direction: column; } }
