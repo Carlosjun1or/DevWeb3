@@ -1,0 +1,27 @@
+{% extends "template.html" %}
+
+{% load static %}
+
+{% block titulo %}Login{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+<section class="auth-card">
+    <div class="auth-heading">
+        <p class="auth-kicker">Acesso à conta</p>
+        <h2>Entrar</h2>
+        <p>Use seus dados para acessar o sistema.</p>
+    </div>
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if form.errors %}
+            <p class="auth-error">Usuário ou senha inválidos. Tente novamente.</p>
+        {% endif %}
+        <button class="auth-button" type="submit">Entrar</button>
+    </form>
+</section>
+{% endblock %}

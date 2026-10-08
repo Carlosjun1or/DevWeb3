@@ -1,0 +1,54 @@
+{% extends "template.html" %}
+
+{% load static %}
+
+{% block titulo %}Perfil{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+    <section class="perfil-card">
+        <div class="perfil-cabecalho">
+            <div class="perfil-avatar" aria-hidden="true">
+                {{ user.get_username|first|upper }}
+            </div>
+            <div>
+                <p class="perfil-saudacao">Minha conta</p>
+                <h2>Olá, {{ user.get_username }}!</h2>
+                <p class="perfil-ajuda">Mantenha seus dados pessoais atualizados.</p>
+                {% if mensagem %}
+                    <p class="perfil-mensagem">{{ mensagem }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <form method="post" class="perfil-form">
+            {% csrf_token %}
+            <div class="perfil-campo">
+                <label for="first_name">Nome</label>
+                <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" placeholder="Digite seu nome">
+            </div>
+
+            <div class="perfil-campo">
+                <label for="last_name">Sobrenome</label>
+                <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" placeholder="Digite seu sobrenome">
+            </div>
+
+            <div class="perfil-campo perfil-campo-completo">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" placeholder="seuemail@exemplo.com">
+            </div>
+
+            <div class="perfil-acoes">
+                <button type="submit">Atualizar perfil</button>
+            </div>
+
+           
+        </form>
+        <div class="perfil-secundaria">
+            <a href="{% url 'alterar_senha' %}">Alterar senha</a>
+        </div>
+    </section>
+{% endblock %}

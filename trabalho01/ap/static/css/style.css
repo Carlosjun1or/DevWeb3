@@ -1,3 +1,15 @@
+:root {
+    --green-900: #123b2f;
+    --green-700: #1e6b4f;
+    --green-500: #2f956d;
+    --gold: #e5b65a;
+    --ink: #20332c;
+    --muted: #687b73;
+    --page: #f4f8f6;
+    --card: #ffffff;
+    --line: #dce8e1;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,9 +17,10 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #ededed;
-    color: #1f1f1f;
+    background: var(--page);
+    color: var(--ink);
+    font-family: "Segoe UI", Arial, sans-serif;
+    line-height: 1.55;
 }
 
 header {
@@ -16,9 +29,9 @@ header {
     align-items: center;
     gap: 16px;
     flex-wrap: wrap;
-    padding: 18px 40px;
-    background: linear-gradient(90deg, #0f3b2e 0%, #1a5a42 100%);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+    padding: 1rem clamp(1rem, 5vw, 4.5rem);
+    background: linear-gradient(120deg, var(--green-900), var(--green-700));
+    box-shadow: 0 4px 18px rgba(18, 59, 47, .18);
 }
 
 .brand-link {
@@ -64,25 +77,75 @@ h1 {
 
 nav {
     display: flex;
-    gap: 20px;
+    gap: .35rem;
     align-items: center;
     flex-wrap: wrap;
     justify-content: flex-end;
 }
 
 nav a {
+    border-radius: 8px;
     color: #ffffff;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: .94rem;
     font-weight: 600;
-    transition: opacity 0.2s ease;
+    padding: .55rem .75rem;
+    transition: background .2s ease, color .2s ease;
 }
 
-nav a:hover {
-    opacity: 0.8;
+nav a:hover,
+nav a:focus {
+    background: rgba(255, 255, 255, .14);
+    color: #fff;
+}
+
+.logout-button {
+    background: rgba(255, 255, 255, .1);
+    color: #fff;
+    font-size: .94rem;
+    padding: .55rem .75rem;
+}
+
+.logout-button:hover,
+.logout-button:focus {
+    background: rgba(255, 255, 255, .2);
+    color: #fff;
 }
 
 main {
-    padding: 28px 20px 60px;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 4rem) 1.25rem 5rem;
     min-height: calc(100vh - 90px);
+}
+
+h2 {
+    color: var(--green-900);
+}
+
+button,
+.btn {
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    transition: transform .2s ease, filter .2s ease;
+}
+
+button:hover,
+.btn:hover {
+    filter: brightness(.94);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 760px) {
+    header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    nav {
+        justify-content: flex-start;
+    }
 }

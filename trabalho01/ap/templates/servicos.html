@@ -11,7 +11,7 @@
 {% block conteudo %}
     <h2 class="servicos-titulo">Serviços</h2>
 
-    <div class="mensagem-sucesso">
+    <!--<div class="mensagem-sucesso">
         {% if tem_servicos %}
             <p>{{ total_servicos }} serviço(s) encontrado(s).</p>
 
@@ -25,71 +25,44 @@
         {% else %}
             <p>Nenhum serviço encontrado.</p>
         {% endif %}
-    </div>
+    </div>-->
     <div class="filtros">
-        
-        <br>
-        <h4>Buscar por nome</h4>
-        <form method="GET">
-            <input type="text" name="busca" placeholder="Buscar por nome" value="{{busca|default:'' }}">
-            <button type="submit">Buscar</button>
-        </form>
-    
+        <div class="filtro-grupo filtro-busca">
+            <h4>Buscar por nome</h4>
+            <form method="GET">
+                <input type="text" name="busca" placeholder="Digite o nome do serviço" value="{{busca|default:'' }}">
+                <button type="submit">Buscar</button>
+            </form>
+        </div>
 
-        <br>
-        
-        <h4>filtrar por Categoria</h4>
-        {% for categoria_item in categorias %}
-            <a href="?categoria={{ categoria_item.id }}">
-                <button>{{ categoria_item.nome }}</button>
-            </a>
-        {% endfor %}   
-        
-        <br>
-        <br>
-    
-        <h4>filtrar por preço</h4>
-        <a href="?preco=baixo">
-            <button>Até R$50,00</button>
-        </a>
-        <a href="?preco=medio">
-            <button>Até R$250,00</button>
-        </a>
+        <div class="filtro-grupo">
+            <h4>Categoria</h4>
+            <div class="filtro-opcoes">
+                {% for categoria_item in categorias %}
+                    <a href="?categoria={{ categoria_item.id }}" class="filtro-opcao">{{ categoria_item.nome }}</a>
+                {% endfor %}
+            </div>
+        </div>
 
-        <a href="?preco=alto">
-            <button>Acima de 250,00</button>
-        </a>
+        <div class="filtro-grupo">
+            <h4>Faixa de preço</h4>
+            <div class="filtro-opcoes">
+                <a href="?preco=baixo" class="filtro-opcao">Até R$ 50,00</a>
+                <a href="?preco=medio" class="filtro-opcao">Até R$ 250,00</a>
+                <a href="?preco=alto" class="filtro-opcao">Acima de R$ 250,00</a>
+            </div>
+        </div>
 
-         <h4>filtrar por Categoria</h4>
-        {% for categoria_item in categorias %}
-            <a href="?categoria={{ categoria_item.id }}">
-                <button>{{ categoria_item.nome }}</button>
-            </a>
-        {% endfor %}   
-        
-        <br>
-        <br>
-    
-        <h4>Ordenar por preço</h4>
-        <a href="?ordem=menor">
-            <button>Ordenar por menor preço</button>
-        </a>
-        <a href="?ordem=maior">
-            <button>Ordenar por maior preço</button>
-        </a>
+        <div class="filtro-grupo">
+            <h4>Ordenar por</h4>
+            <div class="filtro-opcoes">
+                <a href="?ordem=menor" class="filtro-opcao">Menor preço</a>
+                <a href="?ordem=maior" class="filtro-opcao">Maior preço</a>
+                <a href="?ordem=nome" class="filtro-opcao">Nome</a>
+            </div>
+        </div>
 
-        <a href="?ordem=nome">
-            <button>Ordenar por nome</button>
-        </a>
-
-         <br>
-        <br>
-    
-        <h4>Limpar Filtros</h4>
-        <a href="{% url 'servicos' %}">
-            <button>Limpar Filtros</button>
-        </a>
-
+        <a href="{% url 'servicos' %}" class="filtro-limpar">Limpar filtros</a>
     </div>
     <br>
     <div class="tabela-servicos">

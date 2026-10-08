@@ -1,22 +1,19 @@
-body {
-    background: #eeeeee;
-}
-
 .contatos-titulo {
     text-align: center;
     font-size: 2.3rem;
     font-weight: 700;
     margin: 15px 0 26px;
-    color: #212121;
+    color: var(--green-900);
 }
 
 .tabela-contatos {
     max-width: 980px;
     margin: 0 auto;
-    border: 1px solid #d5d5d5;
-    border-radius: 6px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
     overflow: hidden;
-    background: #f3f3f3;
+    background: var(--card);
+    box-shadow: 0 12px 28px rgba(18, 59, 47, .08);
 }
 
 .tabela-contatos table {
@@ -27,34 +24,37 @@ body {
 
 .tabela-contatos th,
 .tabela-contatos td {
-    border: 1px solid #d5d5d5;
+    border-bottom: 1px solid var(--line);
+    border-right: 0;
+    border-left: 0;
+    border-top: 0;
     padding: 14px 12px;
     text-align: left;
     vertical-align: top;
     font-size: 1rem;
-    color: #222;
+    color: var(--ink);
     word-wrap: break-word;
 }
 
 .tabela-contatos thead th {
-    background: #111111;
+    background: var(--green-900);
     color: #ffffff;
     font-weight: 700;
     text-align: center;
 }
 
 .tabela-contatos tbody td {
-    background: #f9f9f9;
+    background: var(--card);
 }
 
 .tabela-contatos tbody tr:nth-child(even) td {
-    background: #f1f1f1;
+    background: #f5faf7;
 }
 
 .btn-excluir {
     display: inline-block;
     padding: 8px 16px;
-    background: #ea5b46;
+    background: #c64d4d;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
@@ -63,7 +63,7 @@ body {
 }
 
 .btn-excluir:hover {
-    background: #d84d39;
+    background: #a63e3e;
 }
 
 @media (max-width: 900px) {

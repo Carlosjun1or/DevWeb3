@@ -1,0 +1,27 @@
+{% extends "template.html" %}
+
+{% load static %}
+
+{% block titulo %}Alterar senha{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+<section class="auth-card">
+    <div class="auth-heading">
+        <p class="auth-kicker">Segurança</p>
+        <h2>Alterar senha</h2>
+        <p>Escolha uma senha forte para proteger sua conta.</p>
+    </div>
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if form.errors %}
+            <p class="auth-error">Não foi possível alterar a senha. Confira os campos.</p>
+        {% endif %}
+        <button class="auth-button" type="submit">Salvar nova senha</button>
+    </form>
+</section>
+{% endblock %}
