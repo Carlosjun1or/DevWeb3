@@ -1,0 +1,36 @@
+{% extends "template.html" %}
+
+{% load static %}
+
+{% block titulo %}Cadastro{% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+<section class="auth-card">
+    <div class="auth-heading">
+        <p class="auth-kicker">Crie sua conta</p>
+        <h2>Cadastrar usuário</h2>
+        <p>Preencha os campos abaixo para criar seu acesso.</p>
+    </div>
+
+    {% if mensagem %}
+        <p class="auth-success">{{ mensagem }}</p>
+        <a class="auth-button" href="{% url 'login' %}">Ir para o login</a>
+    {% else %}
+        {% if form.errors %}
+            <p class="auth-error" role="alert">
+                Não foi possível concluir o cadastro. Confira os erros indicados nos campos abaixo.
+            </p>
+        {% endif %}
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="auth-button" type="submit">Cadastrar</button>
+        </form>
+        <p class="auth-footer">Já tem uma conta? <a href="{% url 'login' %}">Entrar</a></p>
+    {% endif %}
+</section>
+{% endblock %}

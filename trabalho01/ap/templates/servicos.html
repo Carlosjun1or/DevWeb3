@@ -35,34 +35,39 @@
             </form>
         </div>
 
-        <div class="filtro-grupo">
-            <h4>Categoria</h4>
-            <div class="filtro-opcoes">
-                {% for categoria_item in categorias %}
-                    <a href="?categoria={{ categoria_item.id }}" class="filtro-opcao">{{ categoria_item.nome }}</a>
-                {% endfor %}
-            </div>
-        </div>
+        <details class="filtros-avancados">
+            <summary>Mais filtros</summary>
+            <div class="filtros-opcoes-avancadas">
+                <div class="filtro-grupo">
+                    <h4>Categoria</h4>
+                    <div class="filtro-opcoes">
+                        {% for categoria_item in categorias %}
+                            <a href="?categoria={{ categoria_item.id }}" class="filtro-opcao">{{ categoria_item.nome }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
 
-        <div class="filtro-grupo">
-            <h4>Faixa de preço</h4>
-            <div class="filtro-opcoes">
-                <a href="?preco=baixo" class="filtro-opcao">Até R$ 50,00</a>
-                <a href="?preco=medio" class="filtro-opcao">Até R$ 250,00</a>
-                <a href="?preco=alto" class="filtro-opcao">Acima de R$ 250,00</a>
-            </div>
-        </div>
+                <div class="filtro-grupo">
+                    <h4>Faixa de preço</h4>
+                    <div class="filtro-opcoes">
+                        <a href="?preco=baixo" class="filtro-opcao">Até R$ 50,00</a>
+                        <a href="?preco=medio" class="filtro-opcao">Até R$ 250,00</a>
+                        <a href="?preco=alto" class="filtro-opcao">Acima de R$ 250,00</a>
+                    </div>
+                </div>
 
-        <div class="filtro-grupo">
-            <h4>Ordenar por</h4>
-            <div class="filtro-opcoes">
-                <a href="?ordem=menor" class="filtro-opcao">Menor preço</a>
-                <a href="?ordem=maior" class="filtro-opcao">Maior preço</a>
-                <a href="?ordem=nome" class="filtro-opcao">Nome</a>
-            </div>
-        </div>
+                <div class="filtro-grupo">
+                    <h4>Ordenar por</h4>
+                    <div class="filtro-opcoes">
+                        <a href="?ordem=menor" class="filtro-opcao">Menor preço</a>
+                        <a href="?ordem=maior" class="filtro-opcao">Maior preço</a>
+                        <a href="?ordem=nome" class="filtro-opcao">Nome</a>
+                    </div>
+                </div>
 
-        <a href="{% url 'servicos' %}" class="filtro-limpar">Limpar filtros</a>
+                <a href="{% url 'servicos' %}" class="filtro-limpar">Limpar filtros</a>
+            </div>
+        </details>
     </div>
     <br>
     <div class="tabela-servicos">

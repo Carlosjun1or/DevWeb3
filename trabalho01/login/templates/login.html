@@ -15,6 +15,9 @@
         <h2>Entrar</h2>
         <p>Use seus dados para acessar o sistema.</p>
     </div>
+    {% for message in messages %}
+        <p class="auth-success">{{ message }}</p>
+    {% endfor %}
     <form method="post" class="auth-form">
         {% csrf_token %}
         {{ form.as_p }}
@@ -23,5 +26,6 @@
         {% endif %}
         <button class="auth-button" type="submit">Entrar</button>
     </form>
+    <p class="auth-footer">Ainda não tem uma conta? <a href="{% url 'cadastrar_usuario' %}">Cadastrar</a></p>
 </section>
 {% endblock %}
