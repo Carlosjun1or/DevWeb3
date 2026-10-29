@@ -13,5 +13,8 @@ urlpatterns = [
     path("excluir-contato/<int:id>", views.excluirContato, name="excluirContato"),
     path("integrantes",views.integrantes, name="integrantes"),
     path("add-integrante", views.addIntegrante, name="addIntegrante"),
-    path("del-integrante/<int:id>", views.delIntegrante, name="delIntegrante")
+    path("del-integrante/<int:id>", views.delIntegrante, name="delIntegrante"),
+    
+    path("categoria-api/", views.categorias_api, name="categorias_api"),
+    path("categoria-api/<int:id>", views.categoria_api, name="categoria_api")
 ]

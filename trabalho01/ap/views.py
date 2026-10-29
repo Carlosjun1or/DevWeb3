@@ -1,7 +1,12 @@
 from django.shortcuts import redirect, render
+from .serializers import CategoriaSerializer
 from .models import Contato, Servico, Categoria
 from .forms import FormContato, FormServico
 from .supabase_client import supabase
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
+
 
 # Create your views here.
 
@@ -142,3 +147,32 @@ def addIntegrante(request):
 def delIntegrante(request, id):
     supabase.table("integrantes").delete().eq("id", id).execute()
     return redirect('integrantes')
+
+@api_view(['GET', 'POST'])
+def categorias_api(request):
+    if request.method=='GET':
+        categorias = Categoria.objects.all()
+        serializer = CategoriaSerializer(categorias, many=True)
+        return Response(serializer.data)
+    elif request.method=='POST':
+        serializer = CategoriaSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'DELETE', 'PUT'])
+def categoria_api(request, id):
+    categoria = Categoria.objects.get(id=id)
+    if request.method == 'GET':
+        serializer = CategoriaSerializer(categoria)
+        return Response(serializer.data)
+    elif request.method=='GET':
+        categoria.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    elif request.method == 'PUT':
+        serializer = CategoriaSerializer(categoria, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
