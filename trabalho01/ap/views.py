@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from .models import Contato, Servico, Categoria
 from .forms import FormContato, FormServico
+from .supabase_client import supabase
 
 # Create your views here.
 
@@ -119,3 +120,25 @@ def integrantes(request):
 
     resposta = (supabase.table("integrantes").select("*").execute())
     return render(request, "integrantes.html", {'integrantes': resposta.data}   )
+
+def addIntegrante(request):
+    if request.method == "POST":
+        nome = request.POST.get("nome")
+        cargo = request.POST.get("cargo")
+        biografia = request.POST.get("biografia")
+        foto_url = request.POST.get("foto_url")
+        
+        supabase.table("integrantes").insert({
+            "nome": nome,
+            "cargo": cargo,
+            "biografia": biografia,
+            "foto_url": foto_url
+        }).execute()
+        
+        return redirect('integrantes')
+    
+    return render(request, "add-integrante.html")
+
+def delIntegrante(request, id):
+    supabase.table("integrantes").delete().eq("id", id).execute()
+    return redirect('integrantes')

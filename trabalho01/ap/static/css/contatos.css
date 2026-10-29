@@ -51,19 +51,29 @@
     background: #f5faf7;
 }
 
-.btn-excluir {
-    display: inline-block;
-    padding: 8px 16px;
-    background: #c64d4d;
-    color: #fff;
-    text-decoration: none;
+/* Botões de ação — padrão consistente com servicos.css */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 82px;
+    height: 34px;
+    padding: 0 14px;
     border-radius: 5px;
+    text-decoration: none;
     font-weight: 600;
+    font-size: 0.9rem;
     text-align: center;
+    color: #fff;
+    transition: opacity 0.2s ease;
 }
 
-.btn-excluir:hover {
-    background: #a63e3e;
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn-excluir {
+    background: #c64d4d;
 }
 
 @media (max-width: 900px) {

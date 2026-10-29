@@ -12,4 +12,6 @@ urlpatterns = [
     path("contatos", views.contatos, name="contatos"),
     path("excluir-contato/<int:id>", views.excluirContato, name="excluirContato"),
     path("integrantes",views.integrantes, name="integrantes"),
+    path("add-integrante", views.addIntegrante, name="addIntegrante"),
+    path("del-integrante/<int:id>", views.delIntegrante, name="delIntegrante")
 ]

@@ -5,27 +5,35 @@
 {% block titulo %} Integrantes {% endblock %}
 
 {% block estilos %}
-<link rel="stylesheet" href="{% static 'css/servicos.css' %}">
+<link rel="stylesheet" href="{% static 'css/integrantes.css' %}">
 {% endblock %}
 
 {% block conteudo %}
-    <h2 class="servicos-titulo">Integrantes</h2>
-    {% for integrante in integrantes %}
-        <p>
-            {%if integrante.foto_url %}
-                <img src="{{ integrante.foto_url }}" alt="{{ integrante.nome }}" width="100">
-            {% endif %}
-        </p>
-        <p>
-            <b>
-            {{ integrante.nome }}
-            ({{ integrante.cargo }})
-            </b><hr>
-            {{ integrante.biografia }}
-            <br><hr>
-        </p>
-        {% empty %}
-            <p>Nenhum integrante cadastrado.</p>
-        {% endfor %}
+    <h2 class="integrantes-titulo">Nossa Equipe</h2>
 
+    <div class="integrantes-container">
+        {% for integrante in integrantes %}
+            <div class="integrante-card">
+                {% if integrante.foto_url %}
+                    <img src="{{ integrante.foto_url }}" alt="{{ integrante.nome }}" class="integrante-foto">
+                {% else %}
+                    <div class="integrante-avatar" aria-hidden="true">{{ integrante.nome|first|upper }}</div>
+                {% endif %}
+                <div class="integrante-info">
+                    <p class="integrante-nome">{{ integrante.nome }}</p>
+                    <p class="integrante-cargo">{{ integrante.cargo }}</p>
+                    <p class="integrante-bio">{{ integrante.biografia }}</p>
+                </div>
+                <form method="POST" action="{% url 'delIntegrante' integrante.id %}" onsubmit="return confirm('Deseja realmente excluir este integrante?')">
+                    {% csrf_token %}
+                    <button type="submit">Excluir Integrante</button>
+                </form>
+            </div>
+        {% empty %}
+            <p class="integrantes-vazio">Nenhum integrante cadastrado.</p>
+        {% endfor %}
+    </div>
+    <div class="acao-adicionar">
+        <a href="{% url 'addIntegrante' %}" class="btn-adicionar">+ Adicionar Integrante</a>
+    </div>
 {% endblock %}

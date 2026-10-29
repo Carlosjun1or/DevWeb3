@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Categoria, Contato, Servico
 
-# Register your models here.
+
 @admin.register(Categoria)
 class CategoriaAdmin(admin.ModelAdmin):
     list_display = ("nome", "ativo")
@@ -16,6 +16,7 @@ class ContatoAdmin(admin.ModelAdmin):
     list_display = ("nome", "email", "telefone")
     search_fields = ("nome", "email", "telefone", "mensagem")
     ordering = ("nome",)
+    readonly_fields = ("nome", "email", "telefone", "mensagem")
     list_per_page = 25
 
 
@@ -26,4 +27,5 @@ class ServicoAdmin(admin.ModelAdmin):
     search_fields = ("nome", "descricao", "categoria__nome")
     ordering = ("nome", "preco")
     date_hierarchy = "criado_em"
+    readonly_fields = ("criado_em", "atualizado_em")
     list_per_page = 25

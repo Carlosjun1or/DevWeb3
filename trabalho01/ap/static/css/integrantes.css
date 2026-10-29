@@ -1,0 +1,129 @@
+.integrantes-titulo {
+    text-align: center;
+    font-size: 2.3rem;
+    font-weight: 700;
+    margin: 15px 0 26px;
+    color: var(--green-900);
+}
+
+.integrantes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.integrante-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 10px 24px rgba(18, 59, 47, .08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1.5rem;
+    gap: 1rem;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.integrante-card:hover {
+    box-shadow: 0 16px 30px rgba(18, 59, 47, .14);
+    transform: translateY(-4px);
+}
+
+.integrante-foto {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--green-700);
+    display: block;
+}
+
+.integrante-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--green-700);
+    border: 4px solid rgba(255, 255, 255, .8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.integrante-info {
+    text-align: center;
+}
+
+.integrante-nome {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--green-900);
+    margin: 0 0 .3rem;
+}
+
+.integrante-cargo {
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--green-700);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin: 0 0 .75rem;
+}
+
+.integrante-bio {
+    font-size: .95rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.integrantes-vazio {
+    text-align: center;
+    color: var(--muted);
+    font-size: 1.1rem;
+    padding: 3rem 0;
+}
+
+.acao-adicionar {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.btn-adicionar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--green-700);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0 22px;
+    height: 42px;
+    border-radius: 8px;
+    transition: background .2s, transform .2s;
+}
+
+.btn-adicionar:hover,
+.btn-adicionar:focus {
+    background: var(--green-900);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 560px) {
+    .integrantes-titulo {
+        font-size: 1.8rem;
+    }
+
+    .integrantes-container {
+        grid-template-columns: 1fr;
+    }
+}
+
