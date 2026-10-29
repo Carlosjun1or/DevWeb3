@@ -1,0 +1,31 @@
+{% extends 'template.html' %}
+
+{% load static %}
+
+{% block titulo %} Integrantes {% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/servicos.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+    <h2 class="servicos-titulo">Integrantes</h2>
+    {% for integrante in integrantes %}
+        <p>
+            {%if integrante.foto_url %}
+                <img src="{{ integrante.foto_url }}" alt="{{ integrante.nome }}" width="100">
+            {% endif %}
+        </p>
+        <p>
+            <b>
+            {{ integrante.nome }}
+            ({{ integrante.cargo }})
+            </b><hr>
+            {{ integrante.biografia }}
+            <br><hr>
+        </p>
+        {% empty %}
+            <p>Nenhum integrante cadastrado.</p>
+        {% endfor %}
+
+{% endblock %}

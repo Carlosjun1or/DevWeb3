@@ -113,3 +113,9 @@ def excluirContato(request, id):
     contato = Contato.objects.get(id=id)
     contato.delete()
     return redirect('contatos')
+
+def integrantes(request):
+    from .supabase_client import supabase
+
+    resposta = (supabase.table("integrantes").select("*").execute())
+    return render(request, "integrantes.html", {'integrantes': resposta.data}   )

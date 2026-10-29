@@ -1,17 +1,32 @@
 # Como executar o projeto
 
-# 1. Cria o ambiente virtual dentro da pasta do projeto.
+# 1. Entre na pasta do projeto.
+cd trabalho01
+
+# 2. Crie o ambiente virtual dentro da pasta do projeto.
 python -m venv venv
 
-# 2. Ativa o ambiente virtual.
+# 3. Ative o ambiente virtual.
+# CMD:
 venv\Scripts\activate
+# PowerShell:
+.\venv\Scripts\Activate.ps1
 
-# 3. Instala o Django e o Pillow listados no requirements.txt.
+# 4. Instale as dependências do projeto.
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 
-#3.1 Se não tiver, baixe os arquivos de baixo.
-pip install django *dentro do venv voce instala o django*
-python -m pip install Pillow *dentro do venv voce instala o pillow*
-
-# 4. Inicia o servidor do projeto.
+# 5. Inicie o servidor do projeto.
 python manage.py runserver
+
+# Para usar a página de integrantes, crie um arquivo .env nesta pasta com:
+# SUPABASE_URL=sua_url_do_supabase
+# SUPABASE_KEY=sua_chave_do_supabase
+#
+# O dashboard e as demais páginas não dependem dessa configuração.
+
+# Observação:
+# - Se estiver usando PowerShell e receber erro de execução de script, rode:
+# Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+# - O comando acima deve ser executado dentro da pasta "trabalho01".
+# - Se você estiver na raiz do repositório, primeiro use: cd .\trabalho01

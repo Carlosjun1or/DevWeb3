@@ -54,3 +54,38 @@ class CadastroViewTests(TestCase):
         )
         self.assertFalse(User.objects.filter(username="usuario_invalido").exists())
         self.assertFalse(Perfil.objects.exists())
+
+
+class DashboardViewTests(TestCase):
+    def test_dashboard_exibe_pagina_para_cliente(self):
+        usuario = User.objects.create_user(username="cliente", password="senha-forte")
+        Perfil.objects.create(usuario=usuario, tipo_usuario="cliente")
+        self.client.force_login(usuario)
+
+        response = self.client.get(reverse("dashboard"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "dashboard.html")
+
+    def test_dashboard_cria_perfil_cliente_quando_nao_existe(self):
+        usuario = User.objects.create_user(username="sem_perfil", password="senha-forte")
+        self.client.force_login(usuario)
+
+        response = self.client.get(reverse("dashboard"))
+
+        self.assertEqual(response.status_code, 200)
+        perfil = Perfil.objects.get(usuario=usuario)
+        self.assertEqual(perfil.tipo_usuario, "cliente")
+
+    def test_dashboard_redireciona_administrador_para_admin(self):
+        usuario = User.objects.create_user(
+            username="administrador",
+            password="senha-forte",
+            is_staff=True,
+        )
+        Perfil.objects.create(usuario=usuario, tipo_usuario="administrador")
+        self.client.force_login(usuario)
+
+        response = self.client.get(reverse("dashboard"))
+
+        self.assertRedirects(response, reverse("admin:index"))

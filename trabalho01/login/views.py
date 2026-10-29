@@ -9,12 +9,15 @@ from .models import Perfil
 
 @login_required
 def dashboard(request):
-    perfil = Perfil.objects.get(usuario=request.user)
-    
+    perfil, _ = Perfil.objects.get_or_create(
+        usuario=request.user,
+        defaults={"tipo_usuario": "cliente"},
+    )
+
     if perfil.tipo_usuario == 'administrador':
-        return render(request, "/admin/")
-    else:
-      return render(request, "dashboard.html")
+        return redirect("admin:index")
+
+    return render(request, "dashboard.html")
 
 @login_required
 def perfil(request):

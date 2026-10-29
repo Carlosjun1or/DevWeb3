@@ -1,2 +1,4 @@
 Django
 Pillow
+python-dotenv
+supabase

@@ -11,4 +11,5 @@ urlpatterns = [
     path("novo-contato", views.novoContato, name="novoContato"),
     path("contatos", views.contatos, name="contatos"),
     path("excluir-contato/<int:id>", views.excluirContato, name="excluirContato"),
+    path("integrantes",views.integrantes, name="integrantes"),
 ]
