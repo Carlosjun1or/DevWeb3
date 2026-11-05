@@ -1,0 +1,57 @@
+{% extends 'template.html' %}
+
+{% load static %}
+
+{% block titulo %} Graficos {% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/produtos.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+<div style="width: 500px; height: 250px; margin-bottom: 30px;">
+    <canvas id="graficoCategorias"></canvas>
+</div>
+<div style="width: 350px; height: 250px;">
+    <canvas id="graficoStatus"></canvas>
+</div>
+{{categorias_labels|json_script:"categorias"}}
+{{categorias_valores|json_script:"quantidades"}}
+{{status_valores|json_script:"status-valores"}}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const categorias = JSON.parse(document.getElementById('categorias').textContent);
+    const quantidades = JSON.parse(document.getElementById('quantidades').textContent);
+    const statusValores = JSON.parse(document.getElementById('status-valores').textContent);
+
+    new Chart(document.getElementById('graficoCategorias'),{
+        type: 'bar',
+        data: {
+            labels: categorias,
+            datasets:[{
+                label: 'Serviços por categoria',
+                data: quantidades,
+                backgroundColor: 'red'
+            }]
+
+        }
+    });
+
+    new Chart(document.getElementById('graficoStatus'),{
+        type:'doughnut',
+        data: {
+            labels: ['Ativos', 'Inativos'],
+            datasets:[{
+                label: 'Serviços por status',
+                data: statusValores,
+                backgroundColor: [
+                    'green', 
+                    'red'
+                ]
+            }]
+        }
+    });
+</script>
+
+{% endblock %}

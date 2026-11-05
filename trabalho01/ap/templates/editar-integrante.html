@@ -1,0 +1,43 @@
+{% extends 'template.html' %}
+
+{% load static %}
+
+{% block titulo %} Editar Integrante {% endblock %}
+
+{% block estilos %}
+<link rel="stylesheet" href="{% static 'css/form-integrante.css' %}">
+{% endblock %}
+
+{% block conteudo %}
+
+    <h2 class="form-titulo">Editar Integrante</h2>
+
+    <div class="form-container">
+        <form method="post" class="integrante-form">
+            {% csrf_token %}
+
+            <div class="campo">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" value="{{ integrante.nome }}" placeholder="Nome completo" required>
+            </div>
+
+            <div class="campo">
+                <label for="cargo">Cargo:</label>
+                <input type="text" id="cargo" name="cargo" value="{{ integrante.cargo }}" placeholder="Ex: Desenvolvedor, Designer…" required>
+            </div>
+
+            <div class="campo">
+                <label for="biografia">Biografia:</label>
+                <textarea id="biografia" name="biografia" placeholder="Descreva brevemente este integrante…" required>{{ integrante.biografia }}</textarea>
+            </div>
+
+            <div class="campo">
+                <label for="foto_url">URL da Foto:</label>
+                <input type="url" id="foto_url" name="foto_url" value="{{ integrante.foto_url }}" placeholder="https://exemplo.com/foto.jpg">
+            </div>
+
+            <button type="submit">Salvar Alterações</button>
+        </form>
+    </div>
+
+{% endblock %}

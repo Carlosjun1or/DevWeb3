@@ -24,6 +24,7 @@
                     <p class="integrante-cargo">{{ integrante.cargo }}</p>
                     <p class="integrante-bio">{{ integrante.biografia }}</p>
                 </div>
+                <a href="{% url 'editarIntegrante' integrante.id %}" class="btn-adicionar">Editar Integrante</a>
                 <form method="POST" action="{% url 'delIntegrante' integrante.id %}" onsubmit="return confirm('Deseja realmente excluir este integrante?')">
                     {% csrf_token %}
                     <button type="submit">Excluir Integrante</button>

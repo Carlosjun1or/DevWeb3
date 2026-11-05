@@ -1,3 +1,5 @@
+from django.db.models.aggregates import Count
+from django.http import Http404
 from django.shortcuts import redirect, render
 from .serializers import CategoriaSerializer
 from .models import Contato, Servico, Categoria
@@ -6,7 +8,7 @@ from .supabase_client import supabase
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-
+import requests
 
 # Create your views here.
 
@@ -98,7 +100,10 @@ def editarServico(request, id):
 
 def produtos(request):
     servicos = Servico.objects.all()
-    return render(request, "produtos.html", {'servicos': servicos})
+    
+    resposta = requests.get('https://fakestoreapi.com/products')
+    produtos_api = resposta.json()
+    return render(request, "produtos.html", {'produtos': servicos, 'produtos_api': produtos_api})
 
 def contatos(request):
     contatos = Contato.objects.all()
@@ -144,6 +149,23 @@ def addIntegrante(request):
     
     return render(request, "add-integrante.html")
 
+def editarIntegrante(request, id):
+    resposta = supabase.table("integrantes").select("*").eq("id", id).execute()
+    if not resposta.data:
+        raise Http404("Integrante não encontrado.")
+
+    integrante = resposta.data[0]
+    if request.method == "POST":
+        supabase.table("integrantes").update({
+            "nome": request.POST.get("nome"),
+            "cargo": request.POST.get("cargo"),
+            "biografia": request.POST.get("biografia"),
+            "foto_url": request.POST.get("foto_url"),
+        }).eq("id", id).execute()
+        return redirect("integrantes")
+
+    return render(request, "editar-integrante.html", {"integrante": integrante})
+
 def delIntegrante(request, id):
     supabase.table("integrantes").delete().eq("id", id).execute()
     return redirect('integrantes')
@@ -176,3 +198,24 @@ def categoria_api(request, id):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+def relatorios(request):
+    servicos = Servico.objects.all()
+    servicos_ativos = servicos.filter(ativo=True).count()
+    servicos_inativos = servicos.filter(ativo=False).count()
+
+    categorias = servicos.values('categoria__nome').annotate(quantidade=Count('id'))
+
+    return render(request, 'relatorios.html', {
+        'servicos_ativos': servicos_ativos,
+        'servicos_inativos': servicos_inativos,
+        'status_valores': [servicos_ativos, servicos_inativos],
+        'categorias_labels': [
+            item['categoria__nome'] or 'Sem categoria'
+            for item in categorias
+        ],
+        'categorias_valores': [
+            item['quantidade']
+            for item in categorias
+        ],
+    })

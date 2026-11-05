@@ -11,20 +11,37 @@
 {% block conteudo %}
 
 <h2 class="produtos-titulo">Nossos Produtos</h2>
-
 <div class="produtos-container">
-    {% for servico in servicos %}
+    {% for produto in produtos %}
     <div class="produto-card">
-        {% if servico.imagem %}
-            <img src="{{ servico.imagem.url }}" alt="{{ servico.nome }}">
+        {% if produto.imagem %}
+            <img src="{{ produto.imagem.url }}" alt="{{ produto.titulo }}">
         {% else %}
             <div class="produto-imagem placeholder">
                 <span>Imagem</span>
             </div>
         {% endif %}
-        <h3>{{ servico.nome }}</h3>
-        <p>{{ servico.descricao }}</p>
-        <h4><strong>R$ {{ servico.preco|floatformat:2 }}</strong></h4>
+        <h3>{{ produto.titulo }}</h3>
+        <p>{{ produto.descricao }}</p>
+        <h4><strong>R$ {{ produto.preco|floatformat:2 }}</strong></h4>
+    </div>
+    {% endfor %}
+</div>
+
+<h2 class="produtos-titulo">Lojas Parceiras</h2>
+<div class="produtos-container">
+    {% for prod in produtos_api %}
+    <div class="produto-card">
+        {% if prod.image %}
+            <img src="{{ prod.image }}" alt="{{ prod.title }}">
+        {% else %}
+            <div class="produto-imagem placeholder">
+                <span>Imagem</span>
+            </div>
+        {% endif %}
+        <h3>{{ prod.title }}</h3>
+        <p>{{ prod.description }}</p>
+        <h4><strong>R$ {{ prod.price|floatformat:2 }}</strong></h4>
     </div>
     {% endfor %}
 </div>
