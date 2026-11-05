@@ -189,7 +189,7 @@ def categoria_api(request, id):
     if request.method == 'GET':
         serializer = CategoriaSerializer(categoria)
         return Response(serializer.data)
-    elif request.method=='GET':
+    elif request.method=='DELETE':
         categoria.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == 'PUT':

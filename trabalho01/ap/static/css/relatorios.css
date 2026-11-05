@@ -1,0 +1,47 @@
+.relatorios-titulo {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 20px 0 30px;
+    color: var(--green-900);
+}
+
+.relatorios-graficos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    padding: 0 16px 30px;
+    box-sizing: border-box;
+}
+
+.grafico-categorias,
+.grafico-status {
+    position: relative;
+    width: 100%;
+}
+
+.grafico-categorias {
+    max-width: 800px;
+    height: 400px;
+}
+
+.grafico-status {
+    max-width: 500px;
+    height: 380px;
+}
+
+@media (max-width: 560px) {
+    .relatorios-titulo {
+        font-size: 1.8rem;
+    }
+
+    .grafico-categorias {
+        height: 260px;
+    }
+
+    .grafico-status {
+        height: 240px;
+    }
+}
