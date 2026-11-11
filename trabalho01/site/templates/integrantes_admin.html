@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Equipe - Nimbo{% endblock %}
+{% block content %}
+  <section class="hero">
+    <div class="kicker">Painel</div>
+    <h2 class="page-title">Equipe</h2>
+    <a href="{% url 'add_integrante' %}" class="button fill">Novo integrante</a>
+  </section>
+
+  {% if supabase_disponivel %}
+    <div class="grid" style="margin-top: 24px;">
+      {% for integrante in integrantes %}
+        <article class="card">
+          {% if integrante.foto_url %}<img src="{{ integrante.foto_url }}" alt="{{ integrante.nome }}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 12px;" />{% endif %}
+          <h3>{{ integrante.nome }}</h3>
+          <p><strong>{{ integrante.cargo }}</strong></p>
+          <p>{{ integrante.biografia }}</p>
+          <div class="action-row">
+            <a href="{% url 'editar_integrante' integrante.id %}" class="small-btn secondary">Editar</a>
+            <form method="post" action="{% url 'excluir_integrante' integrante.id %}">
+              {% csrf_token %}
+              <button type="submit" class="small-btn danger" onclick="return confirm('Deseja excluir este integrante?')">Excluir</button>
+            </form>
+          </div>
+        </article>
+      {% empty %}
+        <p>Nenhum integrante cadastrado.</p>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="card" style="margin-top: 24px;"><p>O Supabase não está configurado, então a equipe não pode ser gerenciada neste momento.</p></div>
+  {% endif %}
+{% endblock %}

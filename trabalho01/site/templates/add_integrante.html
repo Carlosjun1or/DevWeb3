@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Novo Integrante - Nimbo{% endblock %}
+{% block content %}
+  <section class="form-card" style="max-width: 700px; margin: 40px auto;">
+    <div class="topbar"></div>
+    <h2 class="page-title">Novo Integrante</h2>
+    {% if supabase_disponivel %}
+      <form method="post">
+        {% csrf_token %}
+        <label>Nome</label>
+        <input type="text" name="nome" required />
+        <label>Cargo</label>
+        <input type="text" name="cargo" required />
+        <label>Biografia</label>
+        <textarea name="biografia" rows="5" required></textarea>
+        <label>URL da foto</label>
+        <input type="url" name="foto_url" />
+        <button type="submit" class="button fill" style="margin-top: 18px;">Salvar</button>
+      </form>
+    {% else %}
+      <p>O Supabase não está configurado. Configure SUPABASE_URL e SUPABASE_KEY para continuar.</p>
+    {% endif %}
+  </section>
+{% endblock %}
