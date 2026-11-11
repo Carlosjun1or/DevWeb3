@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Quem Somos - Nimbo{% endblock %}
+{% block content %}
+  <section class="hero">
+    <div class="kicker">Institucional</div>
+    <h2 class="page-title">Quem Somos</h2>
+    <p>Somos uma loja digital que conecta produtos, serviços e pessoas em uma proposta moderna e acessível. Nosso foco é oferecer uma experiência prática para clientes, parceiros e time interno.</p>
+  </section>
+
+  <section class="team-section">
+    <div class="kicker">Equipe</div>
+    {% if supabase_disponivel %}
+      <div class="team-grid">
+        {% for integrante in integrantes %}
+          <article class="card team-card">
+            {% if integrante.foto_url %}<img class="team-avatar" src="{{ integrante.foto_url }}" alt="Foto de {{ integrante.nome }}" />{% endif %}
+            <h3>{{ integrante.nome }}</h3>
+            <p class="team-role"><strong>{{ integrante.cargo }}</strong></p>
+            <p class="team-bio">{{ integrante.biografia }}</p>
+          </article>
+        {% empty %}
+          <p class="team-empty">Não há integrantes cadastrados no momento.</p>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="card"><p>Não foi possível carregar a equipe do Supabase. Tente novamente mais tarde ou verifique a configuração da API.</p></div>
+    {% endif %}
+  </section>
+{% endblock %}

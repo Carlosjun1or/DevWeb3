@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Nimbo - serviços digitais{% endblock %}
+{% block content %}
+  <section class="home-hero">
+    <div class="home-hero-copy">
+      <span class="kicker">Serviços digitais</span>
+      <h1>Seu projeto, mais leve que o ar.</h1>
+      <p>Sites, apps e identidade visual para a sua marca. Escolha o serviço, faça o pedido e acompanhe tudo em um só lugar.</p>
+      <div class="home-hero-actions">
+        <a href="{% url 'produtos' %}" class="button primary">Ver produtos</a>
+        <a href="{% url 'contato' %}" class="button outline-light">Fale conosco</a>
+      </div>
+    </div>
+    <div class="cloud-scene" aria-label="Ilustração de uma nuvem Nimbo">
+      <span class="cloud-chip cloud-chip-sites">Sites</span>
+      <span class="cloud-chip cloud-chip-apps">Apps</span>
+      <span class="cloud-chip cloud-chip-brand">Identidade visual</span>
+      <svg class="cloud-illustration" viewBox="0 0 360 260" role="img" aria-label="Nuvem violeta com sol amarelo">
+        <defs>
+          <linearGradient id="cloud-gradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#A38DFF" />
+            <stop offset="1" stop-color="#5B3DF5" />
+          </linearGradient>
+        </defs>
+        <circle cx="274" cy="64" r="34" fill="var(--sun)" />
+        <path d="M285 207H112a53 53 0 0 1-6-105 74 74 0 0 1 141-1 52 52 0 0 1 38 106Z" fill="url(#cloud-gradient)" />
+        <path d="M146 145c2-20 15-35 34-39" fill="none" stroke="white" stroke-linecap="round" stroke-opacity=".65" stroke-width="9" />
+      </svg>
+    </div>
+  </section>
+
+  <section class="home-section">
+    <span class="kicker">O que oferecemos</span>
+    <h2 class="page-title">Tudo para colocar sua marca no ar</h2>
+    <p>Serviços sob medida, cadastrados e gerenciados pela própria plataforma.</p>
+    <div class="home-card-grid">
+      <article class="card">
+        <span class="number-badge">01</span>
+        <h3>Desenvolvimento de site</h3>
+        <p>Páginas rápidas e responsivas, prontas para publicar.</p>
+      </article>
+      <article class="card">
+        <span class="number-badge">02</span>
+        <h3>Identidade visual</h3>
+        <p>Logo, cores e tipografia para reconhecer sua marca.</p>
+      </article>
+      <article class="card">
+        <span class="number-badge">03</span>
+        <h3>Criação de app</h3>
+        <p>Aplicativos para celular com a cara do seu negócio.</p>
+      </article>
+      <article class="card">
+        <span class="number-badge">04</span>
+        <h3>Criação de banner</h3>
+        <p>Peças gráficas para divulgar em qualquer canal.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="home-section">
+    <span class="kicker">Por que Nimbo</span>
+    <h2 class="page-title">Feito com Django, pensado para você</h2>
+    <div class="home-card-grid" style="margin-top: 20px;">
+      <article class="card">
+        <h3>Segurança</h3>
+        <p>Proteção contra ataques comuns, como CSRF e SQL injection.</p>
+      </article>
+      <article class="card">
+        <h3>Rapidez</h3>
+        <p>Ferramentas prontas que aceleram o desenvolvimento.</p>
+      </article>
+      <article class="card">
+        <h3>Python</h3>
+        <p>Linguagem simples, legível e versátil.</p>
+      </article>
+      <article class="card">
+        <h3>Administração</h3>
+        <p>Painel automático para gerenciar os dados.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="home-cta">
+    <div>
+      <h2>Comece agora</h2>
+      <p>Crie sua conta e acompanhe seus pedidos na dashboard.</p>
+    </div>
+    <a href="{% url 'cadastro_contas' %}" class="button primary">Criar conta</a>
+  </section>
+{% endblock %}
