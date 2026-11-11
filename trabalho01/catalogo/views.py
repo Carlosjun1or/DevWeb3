@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 import requests
-from django.db.models import Count, Q
+from django.db.models import Avg, Count, Q
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework import status
@@ -16,7 +16,7 @@ from .serializers import CategoriaSerializer
 
 @admin_required
 def servicos(request):
-    queryset = Servico.objects.filter(ativo=True)
+    queryset = Servico.objects.all()
     busca = request.GET.get('busca')
     categoria = request.GET.get('categoria')
     faixa = request.GET.get('preco')
@@ -40,7 +40,7 @@ def servicos(request):
     elif ordem == 'nome':
         queryset = queryset.order_by('nome')
 
-    categorias = Categoria.objects.filter(ativo=True)
+    categorias = Categoria.objects.all()
     return render(request, 'servicos.html', {
         'servicos': queryset,
         'categorias': categorias,
@@ -85,7 +85,7 @@ def produtos(request):
     if tipo_busca not in {'todos', 'servicos', 'produtos'}:
         tipo_busca = 'todos'
 
-    servicos = Servico.objects.filter(ativo=True)
+    servicos = Servico.objects.all()
     if busca and tipo_busca in {'todos', 'servicos'}:
         servicos = servicos.filter(
             Q(nome__icontains=busca)
@@ -163,14 +163,28 @@ def relatorios(request):
     servicos = Servico.objects.all()
     ativos = servicos.filter(ativo=True).count()
     inativos = servicos.filter(ativo=False).count()
-    categorias = servicos.values('categoria__nome').annotate(quantidade=Count('id'))
+    total = servicos.count()
+    categorias = (
+        servicos.values('categoria__nome')
+        .annotate(quantidade=Count('id'))
+        .order_by('-quantidade', 'categoria__nome')
+    )
+    top_servicos = servicos.order_by('-preco', 'nome')[:5]
+    media_preco = servicos.aggregate(media=Avg('preco'))['media']
+
     return render(request, 'relatorios.html', {
-        'total_servicos': servicos.count(),
+        'total_servicos': total,
         'servicos_ativos': ativos,
         'servicos_inativos': inativos,
+        'percentual_ativos': round(ativos / total * 100) if total else 0,
+        'total_categorias': Categoria.objects.count(),
+        'preco_medio': media_preco,
         'mais_barato': servicos.order_by('preco').first(),
         'mais_caro': servicos.order_by('-preco').first(),
         'categorias_labels': [item['categoria__nome'] or 'Sem categoria' for item in categorias],
         'categorias_valores': [item['quantidade'] for item in categorias],
+        'status_labels': ['Ativos', 'Inativos'],
         'status_valores': [ativos, inativos],
+        'top_servicos_labels': [servico.nome for servico in top_servicos],
+        'top_servicos_valores': [float(servico.preco) for servico in top_servicos],
     })

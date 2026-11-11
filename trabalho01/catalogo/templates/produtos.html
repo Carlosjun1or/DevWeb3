@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Produtos - Nimbo{% endblock %}
 {% block content %}
   <section class="hero">
@@ -47,14 +48,16 @@
 
     <div class="grid product-grid">
       {% for servico in servicos %}
-        <article class="card product-card">
+        <article class="card product-card{% if not servico.ativo %} product-card-unavailable{% endif %}">
           <div class="product-media">
             {% if servico.imagem %}
               <img src="{{ servico.imagem.url }}" alt="{{ servico.nome }}" />
             {% else %}
               <span class="product-placeholder" aria-hidden="true">N</span>
             {% endif %}
-            <span class="product-badge">Serviço Nimbo</span>
+            <span class="product-badge service-status-badge{% if not servico.ativo %} service-status-unavailable{% endif %}">
+              {% if servico.ativo %}Serviço Nimbo{% else %}Serviço indisponível{% endif %}
+            </span>
           </div>
           <div class="product-content">
             {% if servico.categoria %}<span class="product-category">{{ servico.categoria.nome }}</span>{% endif %}
@@ -79,11 +82,15 @@
               <span>Investimento</span>
               <strong>R$ {{ servico.preco }}</strong>
             </div>
-            <form method="post" action="{% url 'comprar' servico.id %}">
-              {% csrf_token %}
-              <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-              <button type="submit" class="button fill">Adicionar</button>
-            </form>
+            {% if servico.ativo %}
+              <form method="post" action="{% url 'comprar' servico.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+                <button type="submit" class="button fill">Adicionar</button>
+              </form>
+            {% else %}
+              <span class="button unavailable-button" aria-disabled="true">Indisponível</span>
+            {% endif %}
           </div>
         </article>
       {% empty %}
@@ -149,4 +156,8 @@
       {% endfor %}
     </div>
   {% endif %}
+{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/disponibilidade.css' %}?v=1" />
 {% endblock %}

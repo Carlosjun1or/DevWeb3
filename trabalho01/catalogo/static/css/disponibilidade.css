@@ -1,0 +1,35 @@
+.product-card-unavailable {
+  border-color: #e5dfeb;
+  background: #fbfaff;
+}
+
+.product-card-unavailable .product-media img {
+  filter: grayscale(0.75);
+  opacity: 0.72;
+}
+
+.product-card-unavailable .product-content h3,
+.product-card-unavailable .product-price > strong {
+  color: #77738f;
+}
+
+.service-status-badge {
+  background: #e4f6ef;
+  border-color: #c8ecde;
+  color: #237b60;
+}
+
+.service-status-unavailable {
+  background: #fff0f0;
+  border-color: #f0cccc;
+  color: #a23d4c;
+}
+
+.unavailable-button {
+  background: #efedf4;
+  border: 1px solid #e0dce9;
+  color: #77738f;
+  cursor: not-allowed;
+  flex: 0 0 auto;
+  pointer-events: none;
+}

@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Relatórios - Nimbo{% endblock %}
 {% block content %}
-  <section class="hero">
+  <section class="hero reports-hero">
     <div class="hero-back-content">
       <a class="back-link" href="{% url 'dashboard_contas' %}">
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -11,50 +12,251 @@
       </a>
       <div class="kicker">Relatórios</div>
       <h2 class="page-title">Indicadores dos serviços</h2>
+      <p>Resumo do catálogo, distribuição por categoria e comparação de preços.</p>
     </div>
   </section>
 
-  <div class="grid" style="margin-top: 28px;">
-    <article class="card">
-      <div class="label-muted">Total</div>
-      <div class="stat-value">{{ total_servicos }}</div>
+  <section class="report-stats" aria-label="Resumo do catálogo">
+    <article class="card report-stat">
+      <span class="report-stat-icon" aria-hidden="true">01</span>
+      <div class="label-muted">Serviços cadastrados</div>
+      <strong class="stat-value">{{ total_servicos }}</strong>
+      <span class="report-stat-note">{{ total_categorias }} categorias</span>
     </article>
-    <article class="card">
-      <div class="label-muted">Ativos</div>
-      <div class="stat-value">{{ servicos_ativos }}</div>
+    <article class="card report-stat">
+      <span class="report-stat-icon report-stat-icon-green" aria-hidden="true">02</span>
+      <div class="label-muted">Serviços ativos</div>
+      <strong class="stat-value">{{ servicos_ativos }}</strong>
+      <span class="report-stat-note">{{ percentual_ativos }}% do catálogo</span>
     </article>
-    <article class="card">
-      <div class="label-muted">Inativos</div>
-      <div class="stat-value">{{ servicos_inativos }}</div>
+    <article class="card report-stat">
+      <span class="report-stat-icon report-stat-icon-amber" aria-hidden="true">03</span>
+      <div class="label-muted">Preço médio</div>
+      <strong class="stat-value">{% if preco_medio != None %}R$ {{ preco_medio|floatformat:2 }}{% else %}--{% endif %}</strong>
+      <span class="report-stat-note">Com base em todos os serviços</span>
     </article>
-    <article class="card">
-      <div class="label-muted">Mais barato</div>
-      <div class="stat-value">{% if mais_barato %}R$ {{ mais_barato.preco }}{% else %}--{% endif %}</div>
+    <article class="card report-stat">
+      <span class="report-stat-icon report-stat-icon-rose" aria-hidden="true">04</span>
+      <div class="label-muted">Serviços inativos</div>
+      <strong class="stat-value">{{ servicos_inativos }}</strong>
+      <span class="report-stat-note">Disponíveis para revisão</span>
     </article>
-  </div>
+  </section>
 
-  <div class="card" style="margin-top: 24px;">
-    {% if categorias_labels %}
-      <canvas id="categoriaChart" height="120"></canvas>
-    {% else %}
-      <p>Nenhuma categoria disponível.</p>
-    {% endif %}
-  </div>
+  <section class="report-price-highlights" aria-label="Destaques de preço">
+    <article class="card report-price-card">
+      <div>
+        <span class="kicker">Menor preço</span>
+        {% if mais_barato %}
+          <h3>{{ mais_barato.nome }}</h3>
+          <strong>R$ {{ mais_barato.preco|floatformat:2 }}</strong>
+        {% else %}
+          <h3>Nenhum serviço cadastrado</h3>
+          <strong>--</strong>
+        {% endif %}
+      </div>
+      <span class="report-price-arrow" aria-hidden="true">↓</span>
+    </article>
+    <article class="card report-price-card">
+      <div>
+        <span class="kicker">Maior preço</span>
+        {% if mais_caro %}
+          <h3>{{ mais_caro.nome }}</h3>
+          <strong>R$ {{ mais_caro.preco|floatformat:2 }}</strong>
+        {% else %}
+          <h3>Nenhum serviço cadastrado</h3>
+          <strong>--</strong>
+        {% endif %}
+      </div>
+      <span class="report-price-arrow report-price-arrow-high" aria-hidden="true">↑</span>
+    </article>
+  </section>
+
+  <section class="report-charts" aria-label="Gráficos do catálogo">
+    <article class="card report-chart-card report-chart-categories">
+      <div class="report-chart-heading">
+        <div>
+          <span class="kicker">Distribuição</span>
+          <h3>Serviços por categoria</h3>
+        </div>
+      </div>
+      {% if categorias_labels %}
+        <div class="report-chart-canvas">
+          <canvas id="categoriaChart" role="img" aria-label="Quantidade de serviços em cada categoria"></canvas>
+        </div>
+      {% else %}
+        <p class="report-empty">Cadastre serviços para visualizar a distribuição por categoria.</p>
+      {% endif %}
+    </article>
+
+    <article class="card report-chart-card">
+      <div class="report-chart-heading">
+        <div>
+          <span class="kicker">Disponibilidade</span>
+          <h3>Status dos serviços</h3>
+        </div>
+      </div>
+      <div class="report-chart-canvas report-chart-doughnut">
+        <canvas id="statusChart" role="img" aria-label="Proporção de serviços ativos e inativos"></canvas>
+      </div>
+    </article>
+
+    <article class="card report-chart-card report-chart-top">
+      <div class="report-chart-heading">
+        <div>
+          <span class="kicker">Faixa de preço</span>
+          <h3>Serviços de maior valor</h3>
+        </div>
+        <span class="report-chart-caption">Até 5 serviços</span>
+      </div>
+      {% if top_servicos_labels %}
+        <div class="report-chart-canvas report-chart-top-canvas">
+          <canvas id="precoChart" role="img" aria-label="Comparação de preço dos serviços de maior valor"></canvas>
+        </div>
+      {% else %}
+        <p class="report-empty">Cadastre serviços para comparar os preços.</p>
+      {% endif %}
+    </article>
+  </section>
+
+  {{ categorias_labels|json_script:"categorias-labels" }}
+  {{ categorias_valores|json_script:"categorias-valores" }}
+  {{ status_labels|json_script:"status-labels" }}
+  {{ status_valores|json_script:"status-valores" }}
+  {{ top_servicos_labels|json_script:"top-servicos-labels" }}
+  {{ top_servicos_valores|json_script:"top-servicos-valores" }}
 {% endblock %}
 
 {% block extra_css %}
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="{% static 'css/relatorios.css' %}?v=2" />
 {% endblock %}
 
 {% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script>
-    const labels = {{ categorias_labels|safe }};
-    const values = {{ categorias_valores|safe }};
-    if (labels && labels.length) {
+    const reportColors = {
+      violet: '#5B3DF5',
+      violetLight: '#9B88FF',
+      lilac: '#D8D0FF',
+      green: '#2A9D78',
+      amber: '#F0B544',
+      rose: '#D76578',
+      ink: '#1B1840',
+      muted: '#77738F',
+      line: '#E8E4F2',
+    };
+    const readReportData = (id) => JSON.parse(document.getElementById(id).textContent);
+    const reportCurrency = (value) => new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value);
+
+    Chart.defaults.font.family = 'Inter, Arial, sans-serif';
+    Chart.defaults.color = reportColors.muted;
+
+    const categoryLabels = readReportData('categorias-labels');
+    if (categoryLabels.length) {
       new Chart(document.getElementById('categoriaChart'), {
         type: 'bar',
-        data: { labels, datasets: [{ label: 'Serviços por categoria', data: values, backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--violet').trim() }] },
-        options: { responsive: true }
+        data: {
+          labels: categoryLabels,
+          datasets: [{
+            label: 'Serviços',
+            data: readReportData('categorias-valores'),
+            backgroundColor: reportColors.violet,
+            hoverBackgroundColor: reportColors.violetLight,
+            borderRadius: 8,
+            maxBarThickness: 30,
+          }],
+        },
+        options: {
+          indexAxis: 'y',
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => ` ${context.parsed.x} serviço(s)`,
+              },
+            },
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: { precision: 0 },
+              grid: { color: reportColors.line },
+              border: { display: false },
+            },
+            y: { grid: { display: false }, border: { display: false } },
+          },
+        },
+      });
+    }
+
+    new Chart(document.getElementById('statusChart'), {
+      type: 'doughnut',
+      data: {
+        labels: readReportData('status-labels'),
+        datasets: [{
+          data: readReportData('status-valores'),
+          backgroundColor: [reportColors.green, reportColors.rose],
+          hoverOffset: 6,
+          borderWidth: 0,
+          spacing: 4,
+        }],
+      },
+      options: {
+        maintainAspectRatio: false,
+        cutout: '72%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { usePointStyle: true, pointStyle: 'circle', padding: 20 },
+          },
+          tooltip: {
+            callbacks: {
+              label: (context) => ` ${context.label}: ${context.parsed}`,
+            },
+          },
+        },
+      },
+    });
+
+    const priceLabels = readReportData('top-servicos-labels');
+    if (priceLabels.length) {
+      new Chart(document.getElementById('precoChart'), {
+        type: 'bar',
+        data: {
+          labels: priceLabels,
+          datasets: [{
+            label: 'Preço',
+            data: readReportData('top-servicos-valores'),
+            backgroundColor: [reportColors.violet, reportColors.violetLight, reportColors.lilac, reportColors.amber, reportColors.rose],
+            borderRadius: 8,
+            maxBarThickness: 34,
+          }],
+        },
+        options: {
+          indexAxis: 'y',
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => ` ${reportCurrency(context.parsed.x)}`,
+              },
+            },
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              grid: { color: reportColors.line },
+              border: { display: false },
+              ticks: { callback: (value) => reportCurrency(value) },
+            },
+            y: { grid: { display: false }, border: { display: false } },
+          },
+        },
       });
     }
   </script>

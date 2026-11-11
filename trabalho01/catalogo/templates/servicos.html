@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Serviços - Nimbo{% endblock %}
 {% block content %}
   <section class="hero">
@@ -59,14 +60,16 @@
 
   <div class="grid product-grid">
     {% for servico in servicos %}
-      <article class="card product-card service-admin-card">
+      <article class="card product-card service-admin-card{% if not servico.ativo %} product-card-unavailable{% endif %}">
         <div class="product-media">
           {% if servico.imagem %}
             <img src="{{ servico.imagem.url }}" alt="{{ servico.nome }}" />
           {% else %}
             <span class="product-placeholder" aria-hidden="true">N</span>
           {% endif %}
-          <span class="product-badge">Serviço ativo</span>
+          <span class="product-badge service-status-badge{% if not servico.ativo %} service-status-unavailable{% endif %}">
+            {% if servico.ativo %}Disponível{% else %}Indisponível{% endif %}
+          </span>
         </div>
         <div class="product-content">
           {% if servico.categoria %}<span class="product-category">{{ servico.categoria.nome }}</span>{% endif %}
@@ -106,4 +109,8 @@
       </div>
     {% endfor %}
   </div>
+{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/disponibilidade.css' %}?v=1" />
 {% endblock %}
