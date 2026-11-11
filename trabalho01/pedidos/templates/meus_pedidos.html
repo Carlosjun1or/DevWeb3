@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Meus Pedidos - Nimbo{% endblock %}
+{% block content %}
+  <section class="hero">
+    <div class="kicker">Compras</div>
+    <h2 class="page-title">Meus Pedidos</h2>
+    <p>Os pedidos registrados são demonstrativos e não geram cobrança.</p>
+  </section>
+
+  <div class="order-list">
+    {% for pedido in pedidos %}
+      <article class="card order-card">
+        <div class="order-heading">
+          <h3>Pedido #{{ pedido.pk }}</h3>
+          <span>{{ pedido.criado_em|date:'d/m/Y H:i' }}</span>
+        </div>
+
+        {% if pedido.items.all %}
+          <div class="order-items">
+            {% for item in pedido.items.all %}
+              <div class="order-item">
+                {% if item.imagem %}
+                  <img src="{{ item.imagem }}" alt="{{ item.nome }}" />
+                {% endif %}
+                <div>
+                  <span class="kicker">{% if item.servico %}Serviço Nimbo{% else %}Produto parceiro{% endif %}</span>
+                  <h4>{{ item.nome }}</h4>
+                  <p>{{ item.quantidade }} × {% if item.moeda == 'USD' %}US${% else %}R${% endif %} {{ item.preco_unitario|floatformat:2 }}</p>
+                </div>
+                <strong>{% if item.moeda == 'USD' %}US${% else %}R${% endif %} {{ item.subtotal|floatformat:2 }}</strong>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="order-totals">
+            {% for currency, amount in pedido.totais.items %}
+              <p><strong>Total {{ currency }}:</strong> {% if currency == 'USD' %}US${% else %}R${% endif %} {{ amount|floatformat:2 }}</p>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="order-items">
+            <div class="order-item">
+              <div>
+                {% if pedido.servico %}
+                  <span class="kicker">Serviço Nimbo</span>
+                  <h4>{{ pedido.servico.nome }}</h4>
+                  <p>{{ pedido.servico.descricao }}</p>
+                {% else %}
+                  <span class="kicker">Produto parceiro</span>
+                  <h4>{{ pedido.produto_nome }}</h4>
+                  <p>{{ pedido.produto_descricao }}</p>
+                {% endif %}
+              </div>
+              <strong>{% if pedido.moeda == 'USD' %}US${% else %}R${% endif %} {{ pedido.preco|floatformat:2 }}</strong>
+            </div>
+          </div>
+        {% endif %}
+      </article>
+    {% empty %}
+      <section class="card cart-empty">
+        <h3>Você ainda não finalizou nenhum pedido</h3>
+        <p>Os itens adicionados ficam no carrinho até você decidir finalizar.</p>
+        <a href="{% url 'carrinho' %}" class="button soft">Ver carrinho</a>
+        <a href="{% url 'produtos' %}" class="button fill">Continuar comprando</a>
+      </section>
+    {% endfor %}
+  </div>
+
+  {% if pedidos %}
+    <a href="{% url 'carrinho' %}" class="button soft" style="margin-top: 20px;">Ver carrinho</a>
+    <a href="{% url 'produtos' %}" class="button fill" style="margin-top: 20px;">Continuar comprando</a>
+  {% endif %}
+{% endblock %}

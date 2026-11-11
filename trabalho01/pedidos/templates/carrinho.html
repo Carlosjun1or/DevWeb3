@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %}Carrinho - Nimbo{% endblock %}
+{% block content %}
+  <div class="cart-page">
+    <section class="hero cart-hero">
+      <div class="kicker">Sua seleção</div>
+      <h2 class="page-title">Carrinho</h2>
+      <p>Confira seus itens e finalize quando estiver pronto. Você não paga nada por aqui.</p>
+    </section>
+
+    {% if itens_carrinho %}
+      <div class="cart-layout">
+        <section class="cart-items-section" aria-labelledby="cart-items-title">
+          <div class="cart-section-heading">
+            <div>
+              <span class="kicker">Sua sacola</span>
+              <h3 id="cart-items-title">Itens selecionados</h3>
+            </div>
+            <span class="cart-count">{{ quantidade_carrinho }} {% if quantidade_carrinho == 1 %}item{% else %}itens{% endif %}</span>
+          </div>
+          <div class="cart-list">
+            {% for item in itens_carrinho %}
+              <article class="card cart-item">
+                <div class="cart-item-media">
+                  {% if item.imagem %}
+                    <img class="cart-item-image" src="{{ item.imagem }}" alt="{{ item.nome }}" />
+                  {% else %}
+                    <div class="cart-item-placeholder" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M4 7.5h16l-1.5 12h-13L4 7.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                        <path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="cart-item-info">
+                  <span class="cart-item-type">{% if item.tipo == 'partner' %}Produto parceiro{% else %}Serviço Nimbo{% endif %}</span>
+                  <h3>{{ item.nome }}</h3>
+                  {% if item.categoria %}<p class="cart-item-category">{{ item.categoria }}</p>{% endif %}
+                  <p class="cart-item-price">
+                    {% if item.moeda == 'USD' %}US${% else %}R${% endif %} {{ item.preco_decimal|floatformat:2 }}
+                    <span>por unidade</span>
+                  </p>
+                </div>
+                <div class="cart-item-actions">
+                  <form method="post" action="{% url 'atualizar_carrinho' item.tipo item.id %}" class="cart-quantity-form">
+                    {% csrf_token %}
+                    <label for="quantity-{{ item.tipo }}-{{ item.id }}">Quantidade</label>
+                    <input id="quantity-{{ item.tipo }}-{{ item.id }}" name="quantidade" type="number" min="0" max="99" value="{{ item.quantidade }}" />
+                    <button type="submit" class="button soft">Atualizar</button>
+                  </form>
+                  <form method="post" action="{% url 'remover_do_carrinho' item.tipo item.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="button outline-light cart-remove">Remover</button>
+                  </form>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        </section>
+
+        <aside class="card cart-summary" aria-labelledby="cart-summary-title">
+          <span class="kicker">Quase lá</span>
+          <h3 id="cart-summary-title">Resumo do pedido</h3>
+          <div class="cart-totals">
+            {% for moeda, total in totais_por_moeda.items %}
+              <p><span>Total {{ moeda }}</span><strong>{% if moeda == 'USD' %}US${% else %}R${% endif %} {{ total|floatformat:2 }}</strong></p>
+            {% endfor %}
+          </div>
+          <p class="cart-disclaimer">Pedido demonstrativo. Nenhuma cobrança será realizada.</p>
+          <div class="cart-summary-actions">
+            {% if user.is_authenticated %}
+              <form method="post" action="{% url 'finalizar_compra' %}">
+                {% csrf_token %}
+                <button type="submit" class="button fill">Finalizar pedido</button>
+              </form>
+            {% else %}
+              <a href="{% url 'contas_login' %}?next={% url 'carrinho' %}" class="button fill">Entrar para finalizar</a>
+            {% endif %}
+            <a href="{% url 'produtos' %}" class="button soft">Continuar comprando</a>
+          </div>
+        </aside>
+      </div>
+    {% else %}
+      <section class="card cart-empty">
+        <div class="cart-empty-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M8 14h32l-3 25H11L8 14Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M17 16V12a7 7 0 0 1 14 0v4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M18 25h12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="kicker">Sua sacola está esperando</span>
+        <h3>Seu carrinho está vazio</h3>
+        <p>Explore os serviços e produtos. O que você escolher fica guardado aqui até decidir finalizar.</p>
+        <a href="{% url 'produtos' %}" class="button fill">Explorar produtos e serviços</a>
+      </section>
+    {% endif %}
+  </div>
+{% endblock %}
