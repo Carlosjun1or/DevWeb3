@@ -46,7 +46,7 @@
                   <form method="post" action="{% url 'atualizar_carrinho' item.tipo item.id %}" class="cart-quantity-form">
                     {% csrf_token %}
                     <label for="quantity-{{ item.tipo }}-{{ item.id }}">Quantidade</label>
-                    <input id="quantity-{{ item.tipo }}-{{ item.id }}" name="quantidade" type="number" min="0" max="99" value="{{ item.quantidade }}" />
+                    <input id="quantity-{{ item.tipo }}-{{ item.id }}" name="quantidade" type="number" min="0" max="99" value="{{ item.quantidade }}" placeholder="1" inputmode="numeric" />
                     <button type="submit" class="button soft">Atualizar</button>
                   </form>
                   <form method="post" action="{% url 'remover_do_carrinho' item.tipo item.id %}">

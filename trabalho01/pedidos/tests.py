@@ -35,6 +35,15 @@ class PedidosTests(TestCase):
         self.assertContains(cart_page, 'Website')
         self.assertContains(cart_page, 'Entrar para finalizar')
 
+    def test_servico_inativo_nao_pode_ser_adicionado_ao_carrinho(self):
+        self.service.ativo = False
+        self.service.save(update_fields=['ativo'])
+
+        response = self.client.post(reverse('comprar', args=[self.service.pk]))
+
+        self.assertEqual(response.status_code, 404)
+        self.assertNotIn('nimbo_cart', self.client.session)
+
     @patch('pedidos.views.requests.get')
     def test_adicionar_parceiro_guarda_no_carrinho_sem_criar_pedido(self, get_product):
         get_product.return_value = self.partner_api_response()
