@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Perfil - Nimbo{% endblock %}
+{% block content %}
+  <section class="form-card" style="max-width: 700px; margin: 40px auto;">
+    <div class="topbar"></div>
+    <a class="back-link" href="{% url 'dashboard_contas' %}">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M19 12H5m7 7-7-7 7-7"></path>
+      </svg>
+      Voltar
+    </a>
+    <h2 class="page-title">Editar Perfil</h2>
+    <form method="post">
+      {% csrf_token %}
+      <label>Nome</label>
+      <input type="text" name="first_name" value="{{ usuario.first_name }}" />
+      <label>Sobrenome</label>
+      <input type="text" name="last_name" value="{{ usuario.last_name }}" />
+      <label>E-mail</label>
+      <input type="email" name="email" value="{{ usuario.email }}" required />
+      <div style="margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap;">
+        <button type="submit" class="button fill">Salvar</button>
+        <a href="{% url 'alterar_senha_contas' %}" class="button soft">Alterar Senha</a>
+      </div>
+    </form>
+  </section>
+{% endblock %}

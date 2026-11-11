@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Nimbo{% endblock %}
+{% block content %}
+  <section class="hero dashboard-hero">
+    <div class="kicker">Dashboard</div>
+    <h2 class="page-title">Olá, {{ request.user.first_name|default:request.user.username }}!</h2>
+  </section>
+
+  <div class="dashboard-grid">
+    {% for card in cards %}
+      <article class="card">
+        <span class="kicker">{{ card.tag }}</span>
+        <h3>{{ card.title }}</h3>
+        <p>{{ card.text }}</p>
+        <a href="{% if card.url == 'admin:index' %}{% url card.url %}{% else %}{% url card.url %}{% endif %}" class="button fill">Acessar</a>
+      </article>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Entrar - Nimbo{% endblock %}
+{% block content %}
+  <section class="form-card" style="max-width: 500px; margin: 48px auto;">
+    <div class="topbar"></div>
+    <a class="back-link" href="{% url 'home' %}">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M19 12H5m7 7-7-7 7-7"></path>
+      </svg>
+      Voltar
+    </a>
+    <h2 class="page-title" style="margin-bottom: 18px;">Entrar</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="button fill" style="width: 100%; margin-top: 12px;">Entrar</button>
+    </form>
+    <div style="margin-top: 18px; display: flex; flex-direction: column; gap: 10px;">
+      <a href="{% url 'password_reset' %}">Esqueceu sua senha?</a>
+      <a href="{% url 'cadastro_contas' %}">Cadastre-se</a>
+    </div>
+  </section>
+{% endblock %}
