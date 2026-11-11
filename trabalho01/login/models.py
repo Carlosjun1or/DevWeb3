@@ -7,7 +7,11 @@ class Perfil(models.Model):
         ('administrador', 'Administrador'),
         ('cliente', 'Cliente'),
     ]
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    class Meta:
+        app_label = 'login'
+
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='login_perfil')
 
     tipo_usuario = models.CharField(max_length=20, choices=TIPOS_USUARIO, default='cliente')
 
