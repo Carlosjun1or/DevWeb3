@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+from .forms import FormContato, FormIntegrante
 from web_site.models import Contato
 
 
@@ -13,6 +14,28 @@ class SiteTests(TestCase):
             username='admin',
             password='senha-segura-123',
             is_staff=True,
+        )
+
+    def test_contact_and_team_forms_include_placeholders_and_phone_mask(self):
+        contact_form = FormContato()
+        team_form = FormIntegrante()
+
+        self.assertEqual(
+            contact_form.fields['telefone'].widget.attrs['data-mask'],
+            'phone',
+        )
+        self.assertEqual(contact_form.fields['telefone'].widget.input_type, 'tel')
+        self.assertEqual(
+            contact_form.fields['telefone'].widget.attrs['placeholder'],
+            '(11) 99999-9999',
+        )
+        self.assertEqual(
+            contact_form.fields['email'].widget.attrs['placeholder'],
+            'voce@exemplo.com',
+        )
+        self.assertEqual(
+            team_form.fields['foto_url'].widget.attrs['placeholder'],
+            'https://exemplo.com/foto.jpg',
         )
 
     def test_contato_publico_funciona(self):
