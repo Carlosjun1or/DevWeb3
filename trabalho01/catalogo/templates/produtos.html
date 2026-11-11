@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% block title %}Produtos - Nimbo{% endblock %}
+{% block content %}
+  <section class="hero">
+    <div class="kicker">Encontre o que procura</div>
+    <h2 class="page-title">Produtos e serviços para sua ideia</h2>
+    <p>Pesquise pelo nome, categoria ou descrição. Escolha se quer ver os serviços da Nimbo, produtos parceiros ou tudo.</p>
+  </section>
+
+  <form method="get" action="{% url 'produtos' %}" class="product-search">
+    <div class="product-search-field">
+      <label for="product-search-query">O que você está procurando?</label>
+      <input
+        id="product-search-query"
+        type="search"
+        name="q"
+        value="{{ busca }}"
+        placeholder="Ex.: site, identidade visual ou mochila"
+        autocomplete="off"
+      />
+    </div>
+    <div class="product-search-type">
+      <label for="product-search-type">Buscar em</label>
+      <select id="product-search-type" name="tipo">
+        <option value="todos" {% if tipo_busca == 'todos' %}selected{% endif %}>Tudo</option>
+        <option value="servicos" {% if tipo_busca == 'servicos' %}selected{% endif %}>Serviços da Nimbo</option>
+        <option value="produtos" {% if tipo_busca == 'produtos' %}selected{% endif %}>Produtos parceiros</option>
+      </select>
+    </div>
+    <div class="product-search-actions">
+      <button type="submit" class="button fill">Buscar</button>
+      {% if busca or tipo_busca != 'todos' %}
+        <a href="{% url 'produtos' %}" class="button soft">Limpar</a>
+      {% endif %}
+    </div>
+  </form>
+
+  {% if busca %}
+    <p class="search-summary">Resultados para <strong>“{{ busca }}”</strong>{% if tipo_busca == 'servicos' %} nos serviços da Nimbo{% elif tipo_busca == 'produtos' %} nos produtos parceiros{% endif %}.</p>
+  {% endif %}
+
+  {% if tipo_busca != 'produtos' %}
+    <section class="hero product-section-heading">
+      <div class="kicker">Feitos para sua marca</div>
+      <h2 class="page-title">Serviços da Nossa Loja</h2>
+    </section>
+
+    <div class="grid product-grid">
+      {% for servico in servicos %}
+        <article class="card product-card">
+          <div class="product-media">
+            {% if servico.imagem %}
+              <img src="{{ servico.imagem.url }}" alt="{{ servico.nome }}" />
+            {% else %}
+              <span class="product-placeholder" aria-hidden="true">N</span>
+            {% endif %}
+            <span class="product-badge">Serviço Nimbo</span>
+          </div>
+          <div class="product-content">
+            {% if servico.categoria %}<span class="product-category">{{ servico.categoria.nome }}</span>{% endif %}
+            <h3>{{ servico.nome }}</h3>
+            {% if servico.descricao %}
+              {% if servico.descricao|length > 110 %}
+                <details class="product-details">
+                  <summary>
+                    <span class="product-description-preview">{{ servico.descricao|truncatechars:110 }}</span>
+                    <span class="read-more-open">Ver descrição completa</span>
+                    <span class="read-more-close">Recolher descrição</span>
+                  </summary>
+                  <p>{{ servico.descricao }}</p>
+                </details>
+              {% else %}
+                <p class="product-description">{{ servico.descricao }}</p>
+              {% endif %}
+            {% endif %}
+          </div>
+          <div class="product-footer">
+            <div class="product-price">
+              <span>Investimento</span>
+              <strong>R$ {{ servico.preco }}</strong>
+            </div>
+            <form method="post" action="{% url 'comprar' servico.id %}">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+              <button type="submit" class="button fill">Adicionar</button>
+            </form>
+          </div>
+        </article>
+      {% empty %}
+        <div class="empty-products">
+          {% if busca %}<p>Nenhum serviço corresponde à sua busca.</p>{% else %}<p>Nenhum serviço disponível no momento.</p>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if tipo_busca != 'servicos' %}
+    <section class="hero product-section-heading">
+      <div class="kicker">Parceiros</div>
+      <h2 class="page-title">Produtos das Lojas Parceiras</h2>
+      <p>Adicione produtos ao carrinho e finalize quando estiver pronto. Pedidos demonstrativos, sem cobrança.</p>
+    </section>
+
+    <div class="grid product-grid">
+      {% for produto in produtos_api %}
+        <article class="card product-card">
+          <div class="product-media">
+            <img src="{{ produto.image }}" alt="{{ produto.title }}" loading="lazy" />
+            <span class="product-badge">Loja parceira</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">{{ produto.category }}</span>
+            <h3>{{ produto.title }}</h3>
+            {% if produto.description|length > 110 %}
+              <details class="product-details">
+                <summary>
+                  <span class="product-description-preview">{{ produto.description|truncatechars:110 }}</span>
+                  <span class="read-more-open">Ver descrição completa</span>
+                  <span class="read-more-close">Recolher descrição</span>
+                </summary>
+                <p>{{ produto.description }}</p>
+              </details>
+            {% else %}
+              <p class="product-description">{{ produto.description }}</p>
+            {% endif %}
+          </div>
+          <div class="product-footer">
+            <div class="product-price">
+              <span>Preço</span>
+              <strong>US$ {{ produto.price|floatformat:2 }}</strong>
+            </div>
+            <form method="post" action="{% url 'comprar_produto_parceiro' produto.id %}">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+              <button type="submit" class="button fill">Adicionar</button>
+            </form>
+          </div>
+        </article>
+      {% empty %}
+        <div class="empty-products">
+          {% if not produtos_api_disponivel %}
+            <p>Os produtos parceiros estão temporariamente indisponíveis. Você ainda pode explorar os serviços da Nimbo.</p>
+          {% elif busca %}
+            <p>Nenhum produto parceiro corresponde à sua busca.</p>
+          {% else %}
+            <p>Nenhum produto parceiro disponível no momento.</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Relatórios - Nimbo{% endblock %}
+{% block content %}
+  <section class="hero">
+    <div class="hero-back-content">
+      <a class="back-link" href="{% url 'dashboard_contas' %}">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M19 12H5m7 7-7-7 7-7"></path>
+        </svg>
+        Voltar
+      </a>
+      <div class="kicker">Relatórios</div>
+      <h2 class="page-title">Indicadores dos serviços</h2>
+    </div>
+  </section>
+
+  <div class="grid" style="margin-top: 28px;">
+    <article class="card">
+      <div class="label-muted">Total</div>
+      <div class="stat-value">{{ total_servicos }}</div>
+    </article>
+    <article class="card">
+      <div class="label-muted">Ativos</div>
+      <div class="stat-value">{{ servicos_ativos }}</div>
+    </article>
+    <article class="card">
+      <div class="label-muted">Inativos</div>
+      <div class="stat-value">{{ servicos_inativos }}</div>
+    </article>
+    <article class="card">
+      <div class="label-muted">Mais barato</div>
+      <div class="stat-value">{% if mais_barato %}R$ {{ mais_barato.preco }}{% else %}--{% endif %}</div>
+    </article>
+  </div>
+
+  <div class="card" style="margin-top: 24px;">
+    {% if categorias_labels %}
+      <canvas id="categoriaChart" height="120"></canvas>
+    {% else %}
+      <p>Nenhuma categoria disponível.</p>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block extra_css %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    const labels = {{ categorias_labels|safe }};
+    const values = {{ categorias_valores|safe }};
+    if (labels && labels.length) {
+      new Chart(document.getElementById('categoriaChart'), {
+        type: 'bar',
+        data: { labels, datasets: [{ label: 'Serviços por categoria', data: values, backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--violet').trim() }] },
+        options: { responsive: true }
+      });
+    }
+  </script>
+{% endblock %}

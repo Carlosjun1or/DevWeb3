@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block title %}Serviços - Nimbo{% endblock %}
+{% block content %}
+  <section class="hero">
+    <div class="hero-back-content">
+      <a class="back-link" href="{% url 'dashboard_contas' %}">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M19 12H5m7 7-7-7 7-7"></path>
+        </svg>
+        Voltar
+      </a>
+      <div class="kicker">Catálogo</div>
+      <h2 class="page-title">Gestão de Serviços</h2>
+    </div>
+  </section>
+
+  <section class="card" style="margin-top: 28px;">
+    <form method="get">
+      <div class="grid">
+        <div>
+          <label>Busca</label>
+          <input type="text" name="busca" value="{{ busca }}" placeholder="Nome do serviço" />
+        </div>
+        <div>
+          <label>Categoria</label>
+          <select name="categoria">
+            <option value="">Todas</option>
+            {% for categoria in categorias %}
+              <option value="{{ categoria.id }}" {% if categoria.id|stringformat:'s' == categoria %}selected{% endif %}>{{ categoria.nome }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div>
+          <label>Faixa de preço</label>
+          <select name="preco">
+            <option value="">Qualquer valor</option>
+            <option value="baixo" {% if preco == 'baixo' %}selected{% endif %}>Até R$ 50</option>
+            <option value="medio" {% if preco == 'medio' %}selected{% endif %}>R$ 51 a R$ 250</option>
+            <option value="alto" {% if preco == 'alto' %}selected{% endif %}>Acima de R$ 250</option>
+          </select>
+        </div>
+        <div>
+          <label>Ordenação</label>
+          <select name="ordem">
+            <option value="">Padrão</option>
+            <option value="nome" {% if ordem == 'nome' %}selected{% endif %}>Nome</option>
+            <option value="menor" {% if ordem == 'menor' %}selected{% endif %}>Menor preço</option>
+            <option value="maior" {% if ordem == 'maior' %}selected{% endif %}>Maior preço</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap;">
+        <button type="submit" class="button fill">Filtrar</button>
+        <a href="{% url 'servicos_admin' %}" class="button soft">Limpar filtros</a>
+        <a href="{% url 'add_servico' %}" class="button fill">Adicionar</a>
+      </div>
+    </form>
+  </section>
+
+  <div class="grid product-grid">
+    {% for servico in servicos %}
+      <article class="card product-card service-admin-card">
+        <div class="product-media">
+          {% if servico.imagem %}
+            <img src="{{ servico.imagem.url }}" alt="{{ servico.nome }}" />
+          {% else %}
+            <span class="product-placeholder" aria-hidden="true">N</span>
+          {% endif %}
+          <span class="product-badge">Serviço ativo</span>
+        </div>
+        <div class="product-content">
+          {% if servico.categoria %}<span class="product-category">{{ servico.categoria.nome }}</span>{% endif %}
+          <h3>{{ servico.nome }}</h3>
+          {% if servico.descricao %}
+            {% if servico.descricao|length > 110 %}
+              <details class="product-details">
+                <summary>
+                  <span class="product-description-preview">{{ servico.descricao|truncatechars:110 }}</span>
+                  <span class="read-more-open">Ver descrição completa</span>
+                  <span class="read-more-close">Recolher descrição</span>
+                </summary>
+                <p>{{ servico.descricao }}</p>
+              </details>
+            {% else %}
+              <p class="product-description">{{ servico.descricao }}</p>
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="product-footer service-admin-footer">
+          <div class="product-price">
+            <span>Investimento</span>
+            <strong>R$ {{ servico.preco }}</strong>
+          </div>
+          <div class="action-row service-admin-actions">
+            <a href="{% url 'editar_servico' servico.id %}" class="small-btn secondary">Editar</a>
+            <form method="post" action="{% url 'excluir_servico' servico.id %}">
+              {% csrf_token %}
+              <button type="submit" class="small-btn danger" onclick="return confirm('Deseja excluir este serviço?')">Excluir</button>
+            </form>
+          </div>
+        </div>
+      </article>
+    {% empty %}
+      <div class="empty-products">
+        <p>Nenhum serviço encontrado.</p>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
