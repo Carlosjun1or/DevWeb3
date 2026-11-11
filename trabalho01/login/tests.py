@@ -2,7 +2,35 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+from .forms import CadastroForm, LoginForm
 from .models import Perfil
+
+
+class FormPlaceholderTests(TestCase):
+    def test_login_and_registration_forms_display_placeholders(self):
+        login_form = LoginForm()
+        registration_form = CadastroForm()
+
+        self.assertEqual(
+            login_form.fields['username'].widget.attrs['placeholder'],
+            'Seu nome de usuário',
+        )
+        self.assertEqual(
+            login_form.fields['password'].widget.attrs['placeholder'],
+            'Sua senha',
+        )
+        self.assertEqual(
+            registration_form.fields['email'].widget.attrs['placeholder'],
+            'voce@exemplo.com',
+        )
+        self.assertEqual(
+            registration_form.fields['password1'].widget.attrs['placeholder'],
+            'Crie uma senha',
+        )
+        self.assertEqual(
+            registration_form.fields['password2'].widget.attrs['placeholder'],
+            'Repita sua senha',
+        )
 
 
 class CadastroViewTests(TestCase):
