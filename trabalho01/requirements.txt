@@ -1,6 +1,8 @@
-Django
-Pillow
-python-dotenv
-supabase
-Djangorestframework
-requests
+Django==5.1.7
+Pillow==11.0.0
+python-dotenv==1.0.1
+supabase==2.34.1
+Djangorestframework==3.15.2
+requests==2.32.3
+psycopg[binary]==3.3.8
+dj-database-url==2.2.0

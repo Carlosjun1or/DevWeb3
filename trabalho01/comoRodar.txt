@@ -16,17 +16,27 @@ venv\Scripts\activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 
-# 5. Inicie o servidor do projeto.
+# 5. Configure o arquivo .env nesta pasta com os dados do Supabase:
+#    • DATABASE_URL: connection string "Session pooler" em Supabase > Connect.
+#    • SUPABASE_URL e SUPABASE_KEY: URL e chave publishable para leitura pública
+#      da equipe.
+#    • SUPABASE_SECRET_KEY: chave secreta usada pelo Django para gerenciar integrantes.
+#      Nunca exponha essa chave no navegador, no Git ou em mensagens.
+
+# 6. Crie/atualize as tabelas do banco.
+python manage.py migrate
+#    • Categorias e serviços ficam no schema public, com acesso somente para leitura
+#      pela API do Supabase.
+#    • Contas, pedidos e mensagens de contato permanecem no schema django, privado
+#      da API pública.
+
+# 7. Inicie o servidor do projeto.
 python manage.py runserver
 
-# Para usar a página de integrantes, crie um arquivo .env nesta pasta com:
-# SUPABASE_URL=sua_url_do_supabase
-# SUPABASE_KEY=sua_chave_do_supabase
-#
-# O dashboard e as demais páginas não dependem dessa configuração.
+# O Django exige DATABASE_URL e não troca silenciosamente para SQLite.
 
 # Observação:
-# - Se estiver usando PowerShell e receber erro de execução de script, rode:
+# • Se estiver usando PowerShell e receber erro de execução de script, rode:
 # Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-# - O comando acima deve ser executado dentro da pasta "trabalho01".
-# - Se você estiver na raiz do repositório, primeiro use: cd .\trabalho01
+# • O comando acima deve ser executado dentro da pasta "trabalho01".
+# • Se estiver na raiz do repositório, primeiro use: cd .\trabalho01
