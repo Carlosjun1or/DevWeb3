@@ -6,8 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block titulo %} LojaFake.com {% endblock %}</title>
-    <link rel="icon" type="image/svg+xml" href="{% static 'images/mercado.svg' %}">
+    <title>{% block titulo %} Nimbo {% endblock %}</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/logo.svg' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block estilos %}{% endblock %}
 </head>
@@ -16,8 +16,8 @@
     <header>
         <a href="{% url 'produtos' %}" class="brand-link" aria-label="Ir para a página inicial">
             <div class="brand">
-                <img src="{% static 'images/mercado.svg' %}" alt="Ícone de mercearia" class="brand-icon">
-                <h1>LojaFake.com</h1>
+                <img src="{% static 'images/logo.svg' %}" alt="Nimbo" class="brand-icon">
+                <h1>Nimbo</h1>
             </div>
         </a>
         <nav>
