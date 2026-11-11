@@ -13,11 +13,11 @@
     <form method="post">
       {% csrf_token %}
       <label>Nome</label>
-      <input type="text" name="first_name" value="{{ usuario.first_name }}" />
+      <input type="text" name="first_name" value="{{ usuario.first_name }}" placeholder="Seu nome" autocomplete="given-name" />
       <label>Sobrenome</label>
-      <input type="text" name="last_name" value="{{ usuario.last_name }}" />
+      <input type="text" name="last_name" value="{{ usuario.last_name }}" placeholder="Seu sobrenome" autocomplete="family-name" />
       <label>E-mail</label>
-      <input type="email" name="email" value="{{ usuario.email }}" required />
+      <input type="email" name="email" value="{{ usuario.email }}" placeholder="voce@exemplo.com" autocomplete="email" required />
       <div style="margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap;">
         <button type="submit" class="button fill">Salvar</button>
         <a href="{% url 'alterar_senha_contas' %}" class="button soft">Alterar Senha</a>
