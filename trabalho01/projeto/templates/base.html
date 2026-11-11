@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Nimbo{% endblock %}</title>
+    <link rel="icon" href="{% static 'images/logo.svg' %}" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=11" />
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a href="{% url 'home' %}" class="brand" aria-label="Nimbo - início">
+          <img src="{% static 'images/logo.svg' %}" alt="" class="brand-logo" />
+          <span>Nimbo</span>
+        </a>
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="primary-navigation"
+          aria-label="Abrir menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <nav class="main-nav" id="primary-navigation" aria-label="Menu principal">
+          <a href="{% url 'quem_somos' %}">Quem Somos</a>
+          <a href="{% url 'produtos' %}">Produtos</a>
+          <a href="{% url 'carrinho' %}" class="cart-nav-link">
+            Carrinho <span class="cart-nav-count">{{ request.session.nimbo_cart_count|default:0 }}</span>
+          </a>
+          <a href="{% url 'contato' %}">Contato</a>
+          <form method="get" action="{% url 'produtos' %}" class="nav-search" role="search">
+            <input
+              type="search"
+              name="q"
+              value="{{ request.GET.q }}"
+              placeholder="Buscar..."
+              aria-label="Buscar serviços ou produtos"
+            />
+            <input type="hidden" name="tipo" value="todos" />
+            <button type="submit" aria-label="Buscar">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="10.8" cy="10.8" r="6.3"></circle>
+                <path d="m15.4 15.4 5 5"></path>
+              </svg>
+            </button>
+          </form>
+          {% if user.is_authenticated %}
+            <a href="{% url 'dashboard_contas' %}" class="button fill">Dashboard</a>
+            <form method="post" action="{% url 'logout_contas' %}" class="logout-form">
+              {% csrf_token %}
+              <button type="submit" class="button outline-light">Sair</button>
+            </form>
+          {% else %}
+            <a href="{% url 'contas_login' %}" class="button fill">Entrar</a>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
+
+    <main class="container page-shell">
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            <div class="message message-{{ message.tags|default:'info' }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-main">
+          <div class="footer-brand">
+            <a href="{% url 'home' %}" class="brand" aria-label="Nimbo - início">
+              <img src="{% static 'images/logo.svg' %}" alt="" class="brand-logo" />
+              <span>Nimbo</span>
+            </a>
+            <p>Ideias digitais que deixam sua marca mais leve para chegar mais longe.</p>
+          </div>
+
+          <nav class="footer-nav" aria-label="Navegação do rodapé">
+            <h2>Explore</h2>
+            <a href="{% url 'home' %}">Início</a>
+            <a href="{% url 'quem_somos' %}">Quem somos</a>
+            <a href="{% url 'produtos' %}">Produtos</a>
+            <a href="{% url 'contato' %}">Contato</a>
+            {% if user.is_authenticated %}
+              <a href="{% url 'dashboard_contas' %}">Dashboard</a>
+            {% else %}
+              <a href="{% url 'contas_login' %}">Entrar</a>
+              <a href="{% url 'cadastro_contas' %}">Criar conta</a>
+            {% endif %}
+          </nav>
+
+          <div class="footer-contact">
+            <h2>Fale com a gente</h2>
+            <a href="mailto:contato@example.com">contato@example.com</a>
+            <a href="{% url 'contato' %}" class="footer-contact-cta">Enviar uma mensagem</a>
+          </div>
+
+          <div class="footer-social">
+            <h2>Redes sociais</h2>
+            <a href="https://www.instagram.com/nimbo.digital/" target="_blank" rel="noopener noreferrer">@nimbo.digital</a>
+            <a href="https://www.linkedin.com/company/nimbo-digital/" target="_blank" rel="noopener noreferrer">Nimbo no LinkedIn</a>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span>© 2026 Nimbo. Todos os direitos reservados.</span>
+          <a href="{% url 'home' %}">Feito para tirar ideias do papel.</a>
+        </div>
+      </div>
+    </footer>
+    <script>
+      const menuToggle = document.querySelector('.menu-toggle');
+      const mainNav = document.querySelector('.main-nav');
+
+      menuToggle.addEventListener('click', () => {
+        const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', String(!isExpanded));
+        menuToggle.setAttribute('aria-label', isExpanded ? 'Abrir menu' : 'Fechar menu');
+        mainNav.classList.toggle('is-open', !isExpanded);
+      });
+
+      mainNav.addEventListener('click', (event) => {
+        if (event.target.closest('a')) {
+          menuToggle.setAttribute('aria-expanded', 'false');
+          menuToggle.setAttribute('aria-label', 'Abrir menu');
+          mainNav.classList.remove('is-open');
+        }
+      });
+
+      document.querySelectorAll('input[type="password"]').forEach((passwordInput) => {
+        const toggle = document.createElement('button');
+        toggle.className = 'password-toggle';
+        toggle.type = 'button';
+        toggle.setAttribute('aria-label', 'Mostrar senha');
+        toggle.setAttribute('aria-pressed', 'false');
+        toggle.textContent = 'Mostrar';
+
+        const fieldWrap = document.createElement('span');
+        fieldWrap.className = 'password-field';
+        passwordInput.parentNode.insertBefore(fieldWrap, passwordInput);
+        fieldWrap.append(passwordInput, toggle);
+
+        toggle.addEventListener('click', () => {
+          const showing = passwordInput.type === 'text';
+          passwordInput.type = showing ? 'password' : 'text';
+          toggle.textContent = showing ? 'Mostrar' : 'Ocultar';
+          toggle.setAttribute('aria-label', showing ? 'Mostrar senha' : 'Ocultar senha');
+          toggle.setAttribute('aria-pressed', String(!showing));
+          passwordInput.focus();
+        });
+      });
+    </script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>
