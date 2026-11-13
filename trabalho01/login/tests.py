@@ -35,7 +35,7 @@ class FormPlaceholderTests(TestCase):
 
 class CadastroViewTests(TestCase):
     def test_get_exibe_formulario_sem_mensagem_de_sucesso(self):
-        response = self.client.get(reverse("cadastrar_usuario"))
+        response = self.client.get(reverse("legacy_login:cadastrar_usuario"))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "cadastro.html")
@@ -44,7 +44,7 @@ class CadastroViewTests(TestCase):
 
     def test_cadastro_valido_cria_usuario_e_redireciona_para_login(self):
         response = self.client.post(
-            reverse("cadastrar_usuario"),
+            reverse("legacy_login:cadastrar_usuario"),
             {
                 "username": "novo_usuario",
                 "email": "novo@example.com",
@@ -54,7 +54,7 @@ class CadastroViewTests(TestCase):
             follow=True,
         )
 
-        self.assertEqual(response.redirect_chain, [(reverse("login"), 302)])
+        self.assertEqual(response.redirect_chain, [(reverse("legacy_login:login"), 302)])
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Usuário cadastrado com sucesso!")
         usuario = User.objects.get(username="novo_usuario")
@@ -63,7 +63,7 @@ class CadastroViewTests(TestCase):
 
     def test_cadastro_invalido_mostra_erros_e_nao_cria_usuario(self):
         response = self.client.post(
-            reverse("cadastrar_usuario"),
+            reverse("legacy_login:cadastrar_usuario"),
             {
                 "username": "usuario_invalido",
                 "email": "invalido@example.com",
@@ -90,7 +90,7 @@ class DashboardViewTests(TestCase):
         Perfil.objects.create(usuario=usuario, tipo_usuario="cliente")
         self.client.force_login(usuario)
 
-        response = self.client.get(reverse("dashboard"))
+        response = self.client.get(reverse("legacy_login:dashboard"))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "dashboard.html")
@@ -99,7 +99,7 @@ class DashboardViewTests(TestCase):
         usuario = User.objects.create_user(username="sem_perfil", password="senha-forte")
         self.client.force_login(usuario)
 
-        response = self.client.get(reverse("dashboard"))
+        response = self.client.get(reverse("legacy_login:dashboard"))
 
         self.assertEqual(response.status_code, 200)
         perfil = Perfil.objects.get(usuario=usuario)
@@ -114,6 +114,6 @@ class DashboardViewTests(TestCase):
         Perfil.objects.create(usuario=usuario, tipo_usuario="administrador")
         self.client.force_login(usuario)
 
-        response = self.client.get(reverse("dashboard"))
+        response = self.client.get(reverse("legacy_login:dashboard"))
 
         self.assertRedirects(response, reverse("admin:index"))

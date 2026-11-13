@@ -41,7 +41,8 @@ def cadastro(request):
                 usuario = form.save()
                 Perfil.objects.create(usuario=usuario, tipo_usuario='cliente')  # Define o tipo de usuário como 'cliente' por padrão
             messages.success(request, "Usuário cadastrado com sucesso! Você já pode entrar.")
-            return redirect("login")
+            return redirect("legacy_login:login")
+        messages.error(request, "Não foi possível concluir o cadastro.")
     else:
         form = CadastroForm()
 
