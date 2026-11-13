@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Produtos - Nimbo{% endblock %}
+{% block title %}Produtos e Serviços - Nimbo{% endblock %}
 {% block content %}
   <section class="hero">
     <div class="kicker">Encontre o que procura</div>
-    <h2 class="page-title">Produtos e serviços para sua ideia</h2>
+    <h2 class="page-title">Produtos e Serviços para sua ideia</h2>
     <p>Pesquise pelo nome, categoria ou descrição. Escolha se quer ver os serviços da Nimbo, produtos parceiros ou tudo.</p>
   </section>
 
@@ -56,7 +56,7 @@
               <span class="product-placeholder" aria-hidden="true">N</span>
             {% endif %}
             <span class="product-badge service-status-badge{% if not servico.ativo %} service-status-unavailable{% endif %}">
-              {% if servico.ativo %}Serviço Nimbo{% else %}Serviço indisponível{% endif %}
+              {% if servico.ativo %}Serviço disponível{% else %}Serviço indisponível{% endif %}
             </span>
           </div>
           <div class="product-content">
