@@ -25,7 +25,7 @@ admin.site.site_header = 'Administração do Sistema'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('web_site.urls')),
-    path('login/', include('login.urls')),
+    path('login/', include(('login.urls', 'login'), namespace='legacy_login')),
     path('contas/', include('contas.urls')),
     path('catalogo/', include('catalogo.urls')),
     path('pedidos/', include('pedidos.urls')),
