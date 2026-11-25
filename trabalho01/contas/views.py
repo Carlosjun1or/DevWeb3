@@ -56,6 +56,8 @@ def cadastro(request):
                 Perfil.objects.get_or_create(usuario=usuario, defaults={'tipo_usuario': 'cliente'})
             messages.success(request, 'Usuário cadastrado com sucesso! Agora você pode entrar.')
             return redirect('contas_login')
+        else:
+            messages.error(request, 'Não foi possível concluir o cadastro. Verifique os campos destacados.')
     else:
         form = CadastroForm()
     return render(request, 'cadastro.html', {'form': form})

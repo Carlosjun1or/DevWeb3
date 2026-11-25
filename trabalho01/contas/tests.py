@@ -35,3 +35,35 @@ class ContasTests(TestCase):
         self.client.force_login(user)
         response = self.client.get(reverse('dashboard'))
         self.assertEqual(response.status_code, 200)
+
+    def test_cadastro_valido_redireciona_com_mensagem_de_sucesso(self):
+        response = self.client.post(
+            reverse('cadastro_contas'),
+            {
+                'username': 'novocliente',
+                'first_name': 'Novo',
+                'last_name': 'Cliente',
+                'email': 'novo.cliente@exemplo.com',
+                'password1': 'SenhaForte-987!',
+                'password2': 'SenhaForte-987!',
+            },
+            follow=True,
+        )
+        self.assertEqual(response.redirect_chain, [(reverse('contas_login'), 302)])
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Usuário cadastrado com sucesso! Agora você pode entrar.')
+        self.assertTrue(get_user_model().objects.filter(username='novocliente').exists())
+
+    def test_cadastro_invalido_exibe_mensagem_de_erro(self):
+        response = self.client.post(
+            reverse('cadastro_contas'),
+            {
+                'username': 'usuario_ruim',
+                'email': 'email_invalido',
+                'password1': '123',
+                'password2': '456',
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Não foi possível concluir o cadastro. Verifique os campos destacados.')
+        self.assertFalse(get_user_model().objects.filter(username='usuario_ruim').exists())

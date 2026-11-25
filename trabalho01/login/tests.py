@@ -39,7 +39,7 @@ class CadastroViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "cadastro.html")
-        self.assertContains(response, "Cadastrar usuário")
+        self.assertContains(response, "Criar Conta")
         self.assertNotContains(response, "Usuário cadastrado com sucesso!")
 
     def test_cadastro_valido_cria_usuario_e_redireciona_para_login(self):
