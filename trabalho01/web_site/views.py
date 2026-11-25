@@ -7,6 +7,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
+from catalogo import views as catalogo_views
 from catalogo.models import Servico
 from contas.permissions import admin_required
 from .forms import FormContato, FormIntegrante
@@ -61,8 +62,7 @@ def quem_somos(request):
 
 
 def produtos(request):
-    servicos = Servico.objects.filter(ativo=True)
-    return render(request, 'produtos.html', {'servicos': servicos, 'produtos_api': []})
+    return catalogo_views.produtos(request)
 
 
 def contato(request):
