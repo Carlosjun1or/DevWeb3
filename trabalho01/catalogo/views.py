@@ -1,4 +1,7 @@
+import json
+import logging
 from decimal import Decimal
+from pathlib import Path
 
 import requests
 from django.db.models import Avg, Count, Q
@@ -12,6 +15,21 @@ from contas.permissions import admin_required
 from .forms import FormServico
 from .models import Categoria, Servico
 from .serializers import CategoriaSerializer
+
+logger = logging.getLogger(__name__)
+MOCK_PRODUCTS_FILE = Path(__file__).resolve().parent / 'mock_produtos.json'
+
+
+def _load_mock_products():
+    if MOCK_PRODUCTS_FILE.exists():
+        try:
+            with open(MOCK_PRODUCTS_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, list):
+                    return data
+        except Exception as e:
+            logger.warning('Failed to load mock products: %s', e)
+    return []
 
 
 @admin_required
@@ -105,16 +123,19 @@ def produtos(request):
             'Accept': 'application/json',
         }
         try:
-            response = requests.get('https://fakestoreapi.com/products', headers=headers, timeout=10)
+            response = requests.get('https://fakestoreapi.com/products', headers=headers, timeout=5)
             response.raise_for_status()
             resposta_api = response.json()
-            produtos_api = [
-                produto for produto in resposta_api
-                if isinstance(produto, dict)
-            ] if isinstance(resposta_api, list) else []
-            produtos_api_disponivel = isinstance(resposta_api, list) and len(produtos_api) > 0
-        except (requests.RequestException, ValueError):
-            produtos_api = []
+            if isinstance(resposta_api, list) and len(resposta_api) > 0:
+                produtos_api = [p for p in resposta_api if isinstance(p, dict)]
+                produtos_api_disponivel = True
+            else:
+                produtos_api = _load_mock_products()
+                produtos_api_disponivel = len(produtos_api) > 0
+        except (requests.RequestException, ValueError) as err:
+            logger.info('FakeStoreAPI unavailable (%s), using local fallback.', err)
+            produtos_api = _load_mock_products()
+            produtos_api_disponivel = len(produtos_api) > 0
 
         if busca:
             termo = busca.casefold()

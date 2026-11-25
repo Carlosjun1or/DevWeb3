@@ -1,4 +1,7 @@
+import json
+import logging
 from decimal import Decimal, InvalidOperation
+from pathlib import Path
 
 import requests
 from django.contrib import messages
@@ -10,6 +13,23 @@ from django.views.decorators.http import require_POST
 
 from catalogo.models import Servico
 from .models import Pedido, PedidoItem
+
+logger = logging.getLogger(__name__)
+MOCK_PRODUCTS_FILE = Path(__file__).resolve().parent.parent / 'catalogo' / 'mock_produtos.json'
+
+
+def _find_mock_product(product_id):
+    if MOCK_PRODUCTS_FILE.exists():
+        try:
+            with open(MOCK_PRODUCTS_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, list):
+                    for item in data:
+                        if isinstance(item, dict) and item.get('id') == product_id:
+                            return item
+        except Exception as e:
+            logger.warning('Failed to search mock product: %s', e)
+    return None
 
 CART_SESSION_KEY = 'nimbo_cart'
 MAX_QUANTITY = 99
@@ -53,12 +73,15 @@ def _partner_product(product_id):
         response = requests.get(
             f'https://fakestoreapi.com/products/{product_id}',
             headers=headers,
-            timeout=10,
+            timeout=5,
         )
         response.raise_for_status()
         product = response.json()
-    except (requests.RequestException, ValueError):
-        return None, 'Não foi possível carregar o produto parceiro. Tente novamente.'
+    except (requests.RequestException, ValueError) as err:
+        logger.info('FakeStoreAPI detail unavailable (%s), trying local fallback.', err)
+        product = _find_mock_product(product_id)
+        if not product:
+            return None, 'Não foi possível carregar o produto parceiro. Tente novamente.'
 
     if not isinstance(product, dict) or product.get('id') != product_id:
         return None, 'O produto parceiro não está disponível para pedido.'
