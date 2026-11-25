@@ -1,19 +1,21 @@
 {% extends 'base.html' %}
 {% block title %}Contato - Nimbo{% endblock %}
 {% block content %}
-  <section class="form-card" style="max-width: 700px; margin: 40px auto;">
-    <div class="topbar"></div>
+  <section class="form-card form-card-md">
     <a class="back-link" href="{% url 'home' %}">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M19 12H5m7 7-7-7 7-7"></path>
       </svg>
       Voltar
     </a>
-    <h2 class="page-title">Contato</h2>
+    <h2 class="page-title">Fale Conosco</h2>
+    <p style="color: var(--muted); margin-top: 4px; margin-bottom: 16px;">Envie uma mensagem e retornaremos em breve.</p>
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit" class="button fill" style="width: 100%;">Enviar mensagem</button>
+      <div class="form-actions form-actions-full">
+        <button type="submit" class="button fill">Enviar mensagem</button>
+      </div>
     </form>
   </section>
 {% endblock %}

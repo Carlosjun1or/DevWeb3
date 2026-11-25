@@ -96,15 +96,23 @@ def produtos(request):
     produtos_api = []
     produtos_api_disponivel = False
     if tipo_busca in {'todos', 'produtos'}:
+        headers = {
+            'User-Agent': (
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                'AppleWebKit/537.36 (KHTML, like Gecko) '
+                'Chrome/125.0.0.0 Safari/537.36'
+            ),
+            'Accept': 'application/json',
+        }
         try:
-            response = requests.get('https://fakestoreapi.com/products', timeout=5)
+            response = requests.get('https://fakestoreapi.com/products', headers=headers, timeout=10)
             response.raise_for_status()
             resposta_api = response.json()
             produtos_api = [
                 produto for produto in resposta_api
                 if isinstance(produto, dict)
             ] if isinstance(resposta_api, list) else []
-            produtos_api_disponivel = isinstance(resposta_api, list)
+            produtos_api_disponivel = isinstance(resposta_api, list) and len(produtos_api) > 0
         except (requests.RequestException, ValueError):
             produtos_api = []
 

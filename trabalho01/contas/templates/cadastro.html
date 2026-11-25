@@ -1,19 +1,23 @@
 {% extends 'base.html' %}
-{% block title %}Novo Usuário - Nimbo{% endblock %}
+{% block title %}Criar Conta - Nimbo{% endblock %}
 {% block content %}
-  <section class="form-card" style="max-width: 620px; margin: 40px auto;">
-    <div class="topbar"></div>
+  <section class="form-card form-card-md">
     <a class="back-link" href="{% url 'contas_login' %}">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M19 12H5m7 7-7-7 7-7"></path>
       </svg>
       Voltar
     </a>
-    <h2 class="page-title">Novo Usuário</h2>
+    <h2 class="page-title">Criar Conta</h2>
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit" class="button fill" style="width: 100%;">Cadastrar-se</button>
+      <div class="form-actions form-actions-full">
+        <button type="submit" class="button fill">Cadastrar-se</button>
+      </div>
     </form>
+    <div class="form-links">
+      <a href="{% url 'contas_login' %}">Já possui uma conta? Entre aqui</a>
+    </div>
   </section>
 {% endblock %}

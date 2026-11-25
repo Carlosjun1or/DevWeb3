@@ -41,10 +41,19 @@ def _cart_redirect(request):
 
 
 def _partner_product(product_id):
+    headers = {
+        'User-Agent': (
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/125.0.0.0 Safari/537.36'
+        ),
+        'Accept': 'application/json',
+    }
     try:
         response = requests.get(
             f'https://fakestoreapi.com/products/{product_id}',
-            timeout=5,
+            headers=headers,
+            timeout=10,
         )
         response.raise_for_status()
         product = response.json()

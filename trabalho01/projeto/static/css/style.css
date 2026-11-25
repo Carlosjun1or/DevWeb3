@@ -715,9 +715,52 @@ td {
 .form-card {
   margin-left: auto;
   margin-right: auto;
-  max-width: 520px;
+  max-width: 600px;
   padding: 32px;
   width: 100%;
+}
+
+.form-card-sm {
+  max-width: 480px;
+}
+
+.form-card-md {
+  max-width: 640px;
+}
+
+.form-card-lg {
+  max-width: 760px;
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.form-actions-full .button {
+  width: 100%;
+}
+
+.form-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-links a {
+  color: var(--violet);
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.18s ease;
+}
+
+.form-links a:hover,
+.form-links a:focus-visible {
+  color: var(--violet-d);
+  text-decoration: underline;
 }
 
 .form-card .topbar {
