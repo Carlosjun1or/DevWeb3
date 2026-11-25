@@ -1,262 +1,373 @@
 <div align="center">
 
-<img src="trabalho01/projeto/static/images/logo.svg" alt="Nimbo" width="92" />
+<img src="trabalho01/projeto/static/images/logo.svg" alt="Logo Nimbo" width="110">
 
-# Nimbo · ideias digitais, do catálogo ao pedido
+# ☁️ Nimbo
 
-Uma vitrine digital para descobrir serviços, conhecer a equipe e transformar escolhas em pedidos — com uma área administrativa para manter tudo em movimento.
+### Ideias digitais, do catálogo ao pedido
 
-[![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Django](https://img.shields.io/badge/Django-5.1.7-092E20?logo=django&logoColor=white)](https://www.djangoproject.com/)
-[![Supabase](https://img.shields.io/badge/Supabase-integrado-3FCF8E?logo=supabase&logoColor=white)](https://supabase.com/)
+Aplicação web completa em **Django 5** + **PostgreSQL (Supabase)** para gestão de **serviços digitais, produtos de parceiros, carrinho de compras e equipe**
 
-**[Começar agora](#-comece-em-poucos-minutos)** ·
-**[Ver funcionalidades](#-o-que-voc%C3%AA-encontra)** ·
-**[Configurar o Supabase](#-configure-o-supabase)** ·
-**[Executar os testes](#-testes)** ·
-**[Contribuir](#-contribua)**
+![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Django](https://img.shields.io/badge/Django-5.1.7-092E20?style=for-the-badge&logo=django&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![DRF](https://img.shields.io/badge/Django_REST-A30000?style=for-the-badge&logo=django&logoColor=white)
+![Gunicorn](https://img.shields.io/badge/Gunicorn-499848?style=for-the-badge&logo=gunicorn&logoColor=white)
+![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)
+
+🛍️ **Catálogo** &nbsp;•&nbsp; 🧺 **Carrinho & Pedidos** &nbsp;•&nbsp; 👥 **Equipe (Supabase)** &nbsp;•&nbsp; 📊 **Relatórios** &nbsp;•&nbsp; 🔐 **Autenticação**
+
+*Projeto Desenvolvido para a Disciplina de Desenvolvimento Web III • FATEC Praia Grande • DSM*
+
+🌐 **[Acesse a Aplicação em Produção no Render](https://nimbo-web-k8xk.onrender.com)**
 
 </div>
 
 ---
 
-<details open>
-<summary><strong>🧭 Navegação rápida</strong></summary>
+## 📑 Sumário
 
-- [O projeto](#-o-projeto)
-- [O que você encontra](#-o-que-voc%C3%AA-encontra)
-- [Comece em poucos minutos](#-comece-em-poucos-minutos)
-- [Configure o Supabase](#-configure-o-supabase)
-- [Mapa do projeto](#-mapa-do-projeto)
-- [Rotas úteis](#-rotas-%C3%BAteis)
+- [Sobre o projeto](#-sobre-o-projeto)
+- [Funcionalidades](#-funcionalidades)
+- [Tecnologias](#️-tecnologias)
+- [Arquitetura](#️-arquitetura)
+- [Integração com Supabase](#-integração-com-supabase)
+- [Como executar localmente](#-como-executar-localmente)
+- [Deploy no Render](#-deploy-no-render)
+- [Páginas e Rotas](#-páginas-e-rotas)
+- [API REST](#-api-rest)
+- [Regras de negócio](#-regras-de-negócio)
 - [Testes](#-testes)
-- [Segurança e configuração](#-seguran%C3%A7a-e-configura%C3%A7%C3%A3o)
-- [Contribua](#-contribua)
+- [Identidade visual](#-identidade-visual)
+- [Limitações e próximos passos](#️-limitações-conhecidas)
 
-</details>
+---
 
-## ✨ O projeto
+## 📌 Sobre o projeto
 
-O **Nimbo** é uma aplicação web feita com Django para apresentar serviços, receber mensagens, organizar pedidos e administrar o conteúdo do site. O catálogo reúne serviços próprios e produtos de lojas parceiras; contas de clientes e pedidos ficam associados ao banco PostgreSQL configurado para o projeto.
+O **Nimbo** é uma plataforma web criada para apresentar e comercializar serviços de tecnologia e design (como desenvolvimento de sites, aplicativos e identidade visual), além de integrar um ecossistema com **produtos de lojas parceiras** consumidos via API REST externa.
 
-> **Em uma frase:** uma experiência integrada para quem visita a loja e ferramentas práticas para quem administra.
+O sistema conta com um catálogo interativo, carrinho de compras demonstrativo persistido em sessão, histórico de pedidos por cliente, formulário de contato e um **painel administrativo completo** com relatórios analíticos de serviços e gestão de equipe integrada em tempo real com o **Supabase**.
 
-## 🚀 O que você encontra
+> 💡 **Destaque da modelagem:** O banco PostgreSQL armazena no schema `django` as contas de usuários, pedidos, itens e contatos, enquanto o schema `public` gerencia os serviços e categorias. A equipe é gerenciada de forma híbrida e segura através da API do Supabase (PostgREST).
 
-<table>
-  <tr>
-    <td width="50%">
-      <h3>🛍️ Catálogo e descoberta</h3>
-      <p>Consulte serviços, veja disponibilidade, pesquise e explore produtos de parceiros.</p>
-    </td>
-    <td width="50%">
-      <h3>🧺 Carrinho e pedidos</h3>
-      <p>Adicione itens, atualize o carrinho e acompanhe pedidos na sua conta.</p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <h3>👥 Equipe e contato</h3>
-      <p>Conheça a equipe e envie mensagens pelo formulário de contato.</p>
-    </td>
-    <td width="50%">
-      <h3>🛠️ Administração</h3>
-      <p>Gerencie serviços, equipe e contatos; consulte relatórios e áreas protegidas.</p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <h3>🔐 Contas de usuário</h3>
-      <p>Cadastre-se, entre, edite seu perfil e gerencie sua senha.</p>
-    </td>
-    <td width="50%">
-      <h3>☁️ Supabase</h3>
-      <p>Integração para consultar dados públicos e administrar integrantes com uma chave secreta apenas no servidor.</p>
-    </td>
-  </tr>
-</table>
+> 🧺 **Carrinho Híbrido:** O carrinho aceita simultaneamente **serviços próprios em BRL (R$)** e **produtos parceiros em USD (US$)**, agrupando os totais por moeda e gerando pedidos rastreáveis no painel do usuário.
 
-<details>
-<summary><strong>🧑‍💻 Quer ver o fluxo da aplicação?</strong></summary>
+---
 
-1. A pessoa explora o catálogo e escolhe serviços ou produtos parceiros.
-2. Os itens selecionados podem ser organizados no carrinho.
-3. Para acompanhar pedidos e acessar recursos da conta, é necessário entrar.
-4. Pessoas autorizadas podem administrar serviços, contatos e equipe.
+## ✨ Funcionalidades
 
-</details>
+### 🛍️ Catálogo e Descoberta
+- Filtros por tipo (Tudo, Serviços Nimbo ou Produtos Parceiros).
+- Campo de busca instantânea com suporte a títulos, categorias e descrições.
+- Exibição de disponibilidade de serviços e badges informativos.
+- Visualização expansível de descrição longa (*read-more*) sem recarregar a página.
 
-## ⚡ Comece em poucos minutos
+### 🧺 Carrinho e Pedidos
+- Adição rápida de serviços e produtos ao carrinho com persistência em sessão (`session-based`).
+- Ajuste dinâmico de quantidades (limite de 1 a 99 itens) e remoção instantânea.
+- Resumo com cálculo automático de subtotais e conversão visual por moeda.
+- Fechamento de pedido demonstrativo e histórico de compras em **Meus Pedidos**.
 
-### 1. Pré-requisitos
+### 👥 Equipe e Institucional
+- Página "Quem Somos" com listagem dinâmica dos integrantes e suas funções.
+- Painel administrativo para cadastrar, editar e remover integrantes via Supabase SDK.
+- Formulário de contato com validação e área restrita para consulta e exclusão de mensagens.
 
-- Python instalado (o projeto foi verificado com Python 3.13).
-- Acesso a um banco PostgreSQL usado pelo Supabase.
-- Credenciais do projeto Supabase para os recursos de equipe.
+### 🛠️ Administração & Relatórios
+- Painel analítico com contagem de serviços ativos/inativos, preço médio e destaques de menor/maior preço.
+- Gestão completa (CRUD) de serviços com upload de imagens e associação de categorias.
+- Controle de acesso com permissão diferenciada para administradores e clientes.
 
-### 2. Prepare o ambiente
+---
 
-Abra um terminal na raiz do repositório:
+## 🛠️ Tecnologias
 
-```powershell
-cd .\trabalho01
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-Copy-Item .env.example .env
-```
-
-> No Windows, caso o PowerShell bloqueie a ativação do ambiente, execute `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` e tente novamente. No CMD, ative com `venv\Scripts\activate`.
-
-<details>
-<summary><strong>🍎 Linux ou macOS</strong></summary>
-
-Execute os comandos abaixo na pasta do repositório:
-
-```bash
-cd trabalho01
-python3 -m venv venv
-source venv/bin/activate
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-cp .env.example .env
-```
-
-</details>
-
-### 3. Preencha o `.env`
-
-Abra `trabalho01/.env` e substitua os valores de exemplo pelas credenciais do seu ambiente. Consulte [Configurar o Supabase](#-configure-o-supabase) para entender cada variável.
-
-### 4. Prepare o banco e inicie
-
-```powershell
-python manage.py migrate
-python manage.py runserver
-```
-
-Abra **http://127.0.0.1:8000/** no navegador.
-
-> O projeto exige `DATABASE_URL` apontando para PostgreSQL fora dos testes. Ele **não** troca automaticamente para SQLite em execução normal.
-
-## ☁️ Configure o Supabase
-
-O arquivo [`trabalho01/.env.example`](trabalho01/.env.example) é um modelo seguro: contém apenas placeholders, nunca credenciais reais.
-
-| Variável | Para que serve |
+| Tecnologia | Uso |
 |---|---|
-| `DATABASE_URL` | Connection string PostgreSQL do Supabase. Use a connection string apropriada ao seu ambiente. |
-| `SUPABASE_URL` | URL do projeto Supabase. |
-| `SUPABASE_KEY` | Chave publishable para operações de leitura pública. |
-| `SUPABASE_SECRET_KEY` | Chave secreta usada pelo servidor para gerenciar integrantes. **Nunca a exponha no navegador.** |
-| `SECRET_KEY` | Chave criptográfica do Django. Defina uma chave privada e forte fora do desenvolvimento local. |
+| 🐍 **Python 3.13** | Linguagem principal do backend |
+| 🌐 **Django 5.1.7** | Framework web full stack (SSR + MVT) |
+| 🔌 **Django REST Framework 3.15** | Criação de endpoints REST para categorias |
+| 🐘 **PostgreSQL** | Banco de dados relacional principal |
+| ⚡ **Supabase** | Banco gerenciado na nuvem + SDK PostgREST (`supabase-py`) |
+| 🦄 **Gunicorn 23.0** | Servidor WSGI HTTP de produção |
+| 📦 **WhiteNoise 6.8** | Servidor e otimizador de arquivos estáticos (CSS/JS) |
+| 🖼️ **Pillow 11.0** | Processamento e validação de uploads de imagem |
+| ☁️ **Render** | Plataforma de hospedagem e CI/CD em nuvem |
+| 🛍️ **FakeStoreAPI** | API externa para catálogo de produtos parceiros |
+| 🎨 **CSS3 Moderno** | Layout com variáveis CSS, Flexbox, Grid e Container Queries |
 
-No Supabase, os dados do Django usam o schema `django`; o catálogo pode acessar tabelas no schema `public` conforme a configuração atual. As migrations criam/atualizam as tabelas Django:
+---
 
-```bash
-python manage.py migrate
+## 🏗️ Arquitetura
+
+```mermaid
+flowchart LR
+    A[🌐 Navegador] -->|HTML + CSS + JS| B[🦄 Gunicorn / Django]
+    B -->|Rotas MVT| C[🎮 Apps Django]
+    C -->|ORM psycopg| D[(🐘 Supabase PostgreSQL)]
+    C -->|API SDK Python| E[⚡ Supabase PostgREST]
+    C -->|HTTP requests| F[🛍️ FakeStoreAPI]
+    B -->|WhiteNoise| G[📦 Arquivos Estáticos]
 ```
 
-<details>
-<summary><strong>🔑 Checklist antes de iniciar</strong></summary>
+### 🧱 Modelo de Dados (ORM)
 
-- [ ] Copiei `.env.example` para `.env`.
-- [ ] Configurei `DATABASE_URL` com acesso PostgreSQL.
-- [ ] Preenchi `SUPABASE_URL`, `SUPABASE_KEY` e `SUPABASE_SECRET_KEY`.
-- [ ] Mantive `.env` fora do Git.
-- [ ] Executei as migrations.
+```mermaid
+erDiagram
+    USER ||--o| PERFIL : "possui (cliente/admin)"
+    USER ||--o{ PEDIDO : "realiza"
+    CATEGORIA ||--o{ SERVICO : "agrupa"
+    SERVICO ||--o{ PEDIDO_ITEM : "origina"
+    PEDIDO ||--o{ PEDIDO_ITEM : "contém"
+    CONTATO {
+        bigint id PK
+        string nome
+        string email
+        string telefone
+        text mensagem
+        datetime criado_em
+    }
+    CATEGORIA {
+        bigint id PK
+        string nome UK
+        text descricao
+        boolean ativo
+    }
+    SERVICO {
+        bigint id PK
+        string nome
+        text descricao
+        decimal preco
+        string imagem
+        boolean ativo
+        bigint categoria_id FK
+    }
+    PEDIDO {
+        bigint id PK
+        bigint usuario_id FK
+        decimal preco
+        string moeda
+        datetime criado_em
+    }
+    PEDIDO_ITEM {
+        bigint id PK
+        bigint pedido_id FK
+        bigint servico_id FK
+        int produto_parceiro_id
+        string nome
+        int quantidade
+        decimal preco_unitario
+        string moeda
+    }
+```
 
-</details>
+### 📁 Estrutura de Pastas
 
-## 🗺️ Mapa do projeto
-
-```text
+```
 DevWeb3/
 ├── README.md
 └── trabalho01/
     ├── manage.py
     ├── requirements.txt
-    ├── .env.example
-    ├── ap/            # Código legado, não habilitado na configuração atual
-    ├── projeto/       # Configurações, rotas globais, layout e arquivos estáticos
-    ├── web_site/      # Páginas públicas, equipe e contato
-    ├── catalogo/      # Serviços, catálogo e relatórios
-    ├── contas/        # Login, cadastro, perfil e recuperação de senha
-    ├── login/         # Fluxo legado de autenticação em /login/
-    ├── pedidos/       # Carrinho e pedidos
-    └── media/          # Imagens enviadas para o catálogo
+    ├── build.sh               # Script de automação de build para o Render
+    ├── .env / .env.example
+    ├── media/                 # Imagens e uploads de serviços
+    ├── projeto/               # Configurações globais (settings.py, urls.py, wsgi.py)
+    │   ├── templates/         # Template base compartilhado (base.html)
+    │   └── static/            # CSS global, scripts de máscara e logotipo
+    ├── catalogo/              # Serviços, categorias, relatórios e produtos parceiros
+    ├── contas/                # Autenticação, perfis de usuário e troca de senha
+    ├── pedidos/               # Carrinho em sessão, checkout e histórico de compras
+    ├── web_site/              # Home, 'Quem somos', contato e painel da equipe
+    ├── login/                 # Rotas legadas de login mantidas por compatibilidade
+    └── ap/                    # Código arquivado da primeira versão
 ```
 
-### Apps Django
+---
 
-| App | Responsabilidade |
+## ⚡ Integração com Supabase
+
+O projeto utiliza o Supabase em duas camadas:
+
+1. **Camada de Banco Relacional (PostgreSQL):**
+   - Configurada via `DATABASE_URL` no `settings.py`.
+   - Utiliza conexão pooler segura com `sslmode=require` e `search_path=django,public`.
+   - As migrações do Django (`python manage.py migrate`) gerenciam tabelas de autenticação, catálogo e pedidos.
+
+2. **Camada de API SDK (`supabase-py`):**
+   - Leitura pública dos integrantes da equipe via `SUPABASE_URL` + `SUPABASE_KEY` (anon/publishable).
+   - Gerenciamento restrito (inclusão, edição e exclusão) utilizando a chave `SUPABASE_SECRET_KEY` exclusivamente no backend em views protegidas com `@admin_required`.
+
+---
+
+## 🚀 Como Executar Localmente
+
+### Pré-requisitos
+- **Python 3.13+** instalado.
+- Conta no **Supabase** (ou instância local do PostgreSQL).
+
+### 1️⃣ Clone o repositório
+```bash
+git clone https://github.com/Carlosjun1or/DevWeb3.git
+cd DevWeb3/trabalho01
+```
+
+### 2️⃣ Crie e ative o ambiente virtual
+```bash
+# Windows (PowerShell)
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+
+# Linux / macOS
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3️⃣ Instale as dependências
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 4️⃣ Configure o arquivo `.env`
+Copie o modelo de exemplo e insira suas credenciais:
+```bash
+cp .env.example .env
+```
+Preencha os valores:
+```ini
+DATABASE_URL=postgresql://postgres.xxx:senha@host:5432/postgres?sslmode=require
+SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_KEY=sua_chave_anon_publica
+SUPABASE_SECRET_KEY=sua_chave_secret_role
+SECRET_KEY=sua_chave_secreta_django
+DEBUG=True
+```
+
+### 5️⃣ Execute as migrações e inicie o servidor
+```bash
+python manage.py migrate
+python manage.py runserver
+```
+
+Acesse: **`http://127.0.0.1:8000/`** 🎉
+
+---
+
+## ☁️ Deploy no Render
+
+A aplicação está configurada para deploy contínuo (**CI/CD**) no Render utilizando o branch **`p2`**.
+
+- **Tipo de Serviço**: Web Service (Python 3)
+- **Root Directory**: `trabalho01`
+- **Build Command**: `./build.sh` (atualiza pip, instala dependências, roda `collectstatic` e aplica `migrate`)
+- **Start Command**: `gunicorn projeto.wsgi:application`
+
+### Variáveis de Ambiente no Render Dashboard:
+| Variável | Valor |
 |---|---|
-| `web_site` | Página inicial, “Quem somos”, contato e gestão da equipe. |
-| `catalogo` | Serviços, produtos, relatórios e endpoints de categorias. |
-| `contas` | Autenticação principal, cadastro, perfil e recuperação de senha. |
-| `pedidos` | Carrinho, finalização e histórico de pedidos. |
-| `login` | Rotas legadas de autenticação, isoladas no namespace `legacy_login`. |
-| `projeto` | Configurações Django, rotas globais, template base e estáticos. |
+| `DATABASE_URL` | String de conexão do Supabase com `sslmode=require` |
+| `SUPABASE_URL` | URL da instância do Supabase |
+| `SUPABASE_KEY` | Chave anon/publishable |
+| `SUPABASE_SECRET_KEY` | Chave secreta de serviço |
+| `SECRET_KEY` | Chave criptográfica única de produção |
+| `DEBUG` | `False` |
 
-## 🧭 Rotas úteis
+---
 
-| Endereço | O que abre |
-|---|---|
-| `/` | Página inicial |
-| `/quem-somos/` | Equipe |
-| `/produtos/` | Catálogo público |
-| `/contato/` | Formulário de contato |
-| `/contas/` | Entrar |
-| `/contas/cadastro/` | Criar conta |
-| `/contas/dashboard/` | Dashboard autenticado |
-| `/pedidos/carrinho/` | Carrinho |
-| `/pedidos/meus-pedidos/` | Histórico de pedidos |
-| `/catalogo/servicos/` | Administração de serviços |
-| `/catalogo/relatorios/` | Relatórios |
-| `/admin/` | Django Admin |
+## 🌐 Páginas e Rotas
 
-> As áreas de administração exigem autenticação e permissões adequadas.
+| Página | Rota | Descrição |
+|---|---|---|
+| 🏠 Início | `/` | Apresentação institucional, serviços em destaque e chamada de ação |
+| 🛍️ Catálogo | `/produtos/` | Vitrine integrada com serviços Nimbo e produtos parceiros |
+| 🧺 Carrinho | `/pedidos/carrinho/` | Visualização dos itens da sacola, ajuste de quantidade e totalizadores |
+| 📦 Meus Pedidos | `/pedidos/meus-pedidos/` | Histórico dos pedidos realizados pelo cliente logado |
+| 👥 Quem Somos | `/quem-somos/` | Apresentação da equipe de especialistas carregada do Supabase |
+| ✉️ Contato | `/contato/` | Formulário para envio de dúvidas e orçamentos |
+| 🔐 Entrar / Cadastrar | `/contas/` e `/contas/cadastro/` | Autenticação, criação de perfil e recuperação de senha |
+| 📊 Dashboard | `/contas/dashboard/` | Central de navegação e atalhos para áreas do sistema |
+| ⚙️ Gestão de Serviços | `/catalogo/servicos/` | Painel administrativo com filtros e cadastro de serviços |
+| 📈 Relatórios | `/catalogo/relatorios/` | Gráficos e indicadores analíticos de precificação e disponibilidade |
+| 🧑‍💼 Painel da Equipe | `/painel/equipe/` | CRUD restrito de integrantes conectado à API do Supabase |
+| 📬 Contatos Admin | `/contatos/` | Listagem e moderação de mensagens recebidas |
+
+---
+
+## 🔌 API REST
+
+Endpoints REST disponíveis via Django REST Framework:
+
+| Método | Rota | Descrição |
+|---|---|---|
+| `GET` | `/catalogo/api/categorias/` | Listar todas as categorias cadastradas |
+| `POST` | `/catalogo/api/categorias/` | Cadastrar uma nova categoria |
+| `GET` | `/catalogo/api/categorias/{id}/` | Detalhes de uma categoria específica |
+| `PUT` | `/catalogo/api/categorias/{id}/` | Atualizar dados da categoria |
+| `DELETE` | `/catalogo/api/categorias/{id}/` | Remover categoria |
+
+---
+
+## 🧠 Regras de Negócio
+
+### 🛍️ Catálogo & Serviços
+- O preço de serviços é formatado em moeda brasileira (BRL) e aceita pontuação com vírgula ou ponto (`R$ 0,00`).
+- Não é possível excluir uma categoria que possua serviços vinculados (`on_delete=models.PROTECT`).
+- Imagens enviadas são armazenadas e servidas de forma estática com cache em disco.
+
+### 🧺 Carrinho & Pedidos
+- O carrinho aceita quantidades entre 1 e 99 unidades por item.
+- Serviços e produtos parceiros possuem moedas distintas (BRL e USD), com totalizadores separados no fechamento.
+- Para concluir a compra, o usuário deve estar autenticado. Ao finalizar, os itens da sessão são convertidos em registros persistentes de `Pedido` e `PedidoItem`.
+
+### 👥 Equipe & Supabase
+- Somente usuários com permissão de administrador (`@admin_required`) podem incluir, editar ou remover integrantes do Supabase.
+- Caso a API externa de integrantes fique temporariamente indisponível, a aplicação exibe um alerta amigável sem quebrar o layout.
+
+---
 
 ## 🧪 Testes
 
-Rode a suíte completa de dentro de `trabalho01`:
+Para executar os testes automatizados do Django:
 
 ```bash
+cd trabalho01
 python manage.py test
 ```
 
-Durante os testes, o projeto configura um banco SQLite em memória; fora deles, exige PostgreSQL.
+Durante a execução da suíte de testes, o Django inicializa automaticamente um banco **SQLite em memória**, mantendo os testes rápidos, isolados e sem afetar os dados reais do PostgreSQL/Supabase.
 
-## 🔒 Segurança e configuração
+---
 
-- **Não** compartilhe nem faça commit do `.env`, senhas, tokens ou chaves privadas.
-- `SUPABASE_SECRET_KEY` deve permanecer exclusivamente no servidor.
-- O `SECRET_KEY` padrão das configurações é somente um fallback de desenvolvimento. Configure uma chave própria e `DEBUG=False` antes de qualquer implantação.
-- O `.env.example` pode ser commitado porque contém apenas nomes e valores fictícios.
-- Imagens enviadas pela aplicação ficam em `trabalho01/media/`.
+## 🎨 Identidade Visual
 
-## 🤝 Contribua
+O design do Nimbo transmite leveza, modernidade e tecnologia:
 
-1. Faça um fork e crie uma branch para sua alteração.
-2. Mantenha as mudanças focadas e siga os padrões do projeto.
-3. Execute `python manage.py test`.
-4. Abra um pull request descrevendo o problema e a solução.
+| Cor | Hex | Uso |
+|---|---|---|
+| 🟣 Violeta Nimbo | `#5B3DF5` | Botões principais, links e destaque de marca |
+| 🔮 Violeta Escuro | `#3F27C7` | Hover e elementos em foco |
+| 🌌 Tinta Escura | `#1B1840` | Headers escuros, textos principais e hero |
+| 🌸 Lilás Suave | `#E9E4FF` | Badges, fundos de destaque e cartões de apoio |
+| ☀️ Amarelo Sol | `#FFC94A` | Acento, kickers em contraste e sol no logo |
+| 📄 Fundo da Página | `#F7F5FF` | Fundo geral da aplicação |
 
-<details>
-<summary><strong>✅ Checklist para pull request</strong></summary>
+Fontes utilizadas: **Space Grotesk** (títulos marcantes) e **Inter** (textos e dados com alta legibilidade).
 
-- [ ] A mudança tem escopo claro.
-- [ ] Testes relevantes foram executados.
-- [ ] Não há `.env`, credenciais ou arquivos locais no commit.
-- [ ] A documentação foi atualizada quando necessário.
+---
 
-</details>
+## ⚠️ Limitações Conhecidas
+
+- O ambiente gratuito do Render reinicia o sistema de arquivos efêmero a cada novo deploy, de modo que novos uploads locais de imagem na pasta `media/` requerem armazenamento persistente em nuvem (ex.: Supabase Storage ou AWS S3) para retenção de longo prazo.
+- O checkout de pedidos é demonstrativo e focado no fluxo operacional, sem gateway de pagamento real acoplado.
 
 ---
 
 <div align="center">
 
-Feito para tirar ideias do papel. ✨
+Desenvolvido por **Carlos Junior** com Django & Supabase 🚀  
+⭐ Se curtiu o projeto, deixe uma estrela no repositório!
 
 </div>
