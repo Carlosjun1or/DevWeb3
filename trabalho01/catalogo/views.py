@@ -4,7 +4,7 @@ from decimal import Decimal
 from pathlib import Path
 
 import requests
-from django.db.models import Avg, Count, Q
+from django.db.models import Avg, Count, F, Q, Sum
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework import status
@@ -12,6 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from contas.permissions import admin_required
+from pedidos.models import Pedido, PedidoItem
 from .forms import FormServico
 from .models import Categoria, Servico
 from .serializers import CategoriaSerializer
@@ -45,11 +46,11 @@ def servicos(request):
     if categoria:
         queryset = queryset.filter(categoria_id=categoria)
     if faixa == 'baixo':
-        queryset = queryset.filter(preco__lte=50)
+        queryset = queryset.filter(preco__lte=1000)
     elif faixa == 'medio':
-        queryset = queryset.filter(preco__gt=50, preco__lte=250)
+        queryset = queryset.filter(preco__gt=1000, preco__lte=2000)
     elif faixa == 'alto':
-        queryset = queryset.filter(preco__gt=250)
+        queryset = queryset.filter(preco__gt=2500)
 
     if ordem == 'menor':
         queryset = queryset.order_by('preco')
@@ -188,32 +189,118 @@ def categoria_api(request, id):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@admin_required
 def relatorios(request):
-    servicos = Servico.objects.all()
-    ativos = servicos.filter(ativo=True).count()
-    inativos = servicos.filter(ativo=False).count()
-    total = servicos.count()
-    categorias = (
-        servicos.values('categoria__nome')
-        .annotate(quantidade=Count('id'))
-        .order_by('-quantidade', 'categoria__nome')
-    )
-    top_servicos = servicos.order_by('-preco', 'nome')[:5]
-    media_preco = servicos.aggregate(media=Avg('preco'))['media']
+    visao = request.GET.get('visao', 'todos')
+    if visao not in {'todos', 'vendas', 'servicos'}:
+        visao = 'todos'
 
-    return render(request, 'relatorios.html', {
-        'total_servicos': total,
-        'servicos_ativos': ativos,
-        'servicos_inativos': inativos,
-        'percentual_ativos': round(ativos / total * 100) if total else 0,
-        'total_categorias': Categoria.objects.count(),
-        'preco_medio': media_preco,
-        'mais_barato': servicos.order_by('preco').first(),
-        'mais_caro': servicos.order_by('-preco').first(),
-        'categorias_labels': [item['categoria__nome'] or 'Sem categoria' for item in categorias],
-        'categorias_valores': [item['quantidade'] for item in categorias],
-        'status_labels': ['Ativos', 'Inativos'],
-        'status_valores': [ativos, inativos],
-        'top_servicos_labels': [servico.nome for servico in top_servicos],
-        'top_servicos_valores': [float(servico.preco) for servico in top_servicos],
-    })
+    context = {
+        'visao': visao,
+    }
+
+    # Relatórios de Serviços
+    if visao in {'todos', 'servicos'}:
+        servicos = Servico.objects.all()
+        ativos = servicos.filter(ativo=True).count()
+        inativos = servicos.filter(ativo=False).count()
+        total = servicos.count()
+        categorias = (
+            servicos.values('categoria__nome')
+            .annotate(quantidade=Count('id'))
+            .order_by('-quantidade', 'categoria__nome')
+        )
+        top_servicos = servicos.order_by('-preco', 'nome')[:5]
+        media_preco = servicos.aggregate(media=Avg('preco'))['media']
+
+        context.update({
+            'total_servicos': total,
+            'servicos_ativos': ativos,
+            'servicos_inativos': inativos,
+            'percentual_ativos': round(ativos / total * 100) if total else 0,
+            'total_categorias': Categoria.objects.count(),
+            'preco_medio': media_preco,
+            'mais_barato': servicos.order_by('preco').first(),
+            'mais_caro': servicos.order_by('-preco').first(),
+            'categorias_labels': [item['categoria__nome'] or 'Sem categoria' for item in categorias],
+            'categorias_valores': [item['quantidade'] for item in categorias],
+            'status_labels': ['Ativos', 'Inativos'],
+            'status_valores': [ativos, inativos],
+            'top_servicos_labels': [servico.nome for servico in top_servicos],
+            'top_servicos_valores': [float(servico.preco) for servico in top_servicos],
+        })
+
+    # Relatórios de Vendas / Pedidos
+    if visao in {'todos', 'vendas'}:
+        pedidos = Pedido.objects.prefetch_related('items__servico')
+        total_pedidos = pedidos.count()
+        total_clientes = pedidos.values('usuario').distinct().count()
+
+        # Itens e faturamento
+        itens_pedidos = PedidoItem.objects.select_related('pedido', 'servico')
+        total_itens_vendidos = sum(item.quantidade for item in itens_pedidos)
+
+        faturamento_brl = Decimal('0.00')
+        faturamento_usd = Decimal('0.00')
+
+        # Se houver itens na tabela PedidoItem
+        if itens_pedidos.exists():
+            for item in itens_pedidos:
+                sub = item.subtotal
+                if item.moeda == 'USD':
+                    faturamento_usd += sub
+                else:
+                    faturamento_brl += sub
+        else:
+            # Caso existam pedidos legados sem PedidoItem
+            for pedido in pedidos:
+                if pedido.moeda == 'USD':
+                    faturamento_usd += pedido.preco
+                else:
+                    faturamento_brl += pedido.preco
+
+        # Tipos de produto vendidos
+        itens_servico_count = sum(item.quantidade for item in itens_pedidos if item.servico_id is not None)
+        itens_parceiro_count = sum(item.quantidade for item in itens_pedidos if item.servico_id is None)
+
+        # Produtos mais vendidos (top 5 por quantidade total)
+        top_produtos_agg = (
+            PedidoItem.objects.values('nome')
+            .annotate(total_qtd=Sum('quantidade'))
+            .order_by('-total_qtd', 'nome')[:5]
+        )
+        top_produtos_labels = [p['nome'] for p in top_produtos_agg]
+        top_produtos_valores = [p['total_qtd'] for p in top_produtos_agg]
+
+        # Top clientes (com mais pedidos)
+        top_clientes_agg = (
+            Pedido.objects.values('usuario__username', 'usuario__first_name')
+            .annotate(qtd_pedidos=Count('id'))
+            .order_by('-qtd_pedidos')[:5]
+        )
+        top_clientes_labels = [
+            c['usuario__first_name'] or c['usuario__username']
+            for c in top_clientes_agg
+        ]
+        top_clientes_valores = [c['qtd_pedidos'] for c in top_clientes_agg]
+
+        ticket_medio_brl = (faturamento_brl / total_pedidos) if total_pedidos > 0 else Decimal('0.00')
+
+        context.update({
+            'total_pedidos': total_pedidos,
+            'total_clientes': total_clientes,
+            'total_itens_vendidos': total_itens_vendidos,
+            'faturamento_brl': faturamento_brl,
+            'faturamento_usd': faturamento_usd,
+            'ticket_medio_brl': ticket_medio_brl,
+            'itens_servico_count': itens_servico_count,
+            'itens_parceiro_count': itens_parceiro_count,
+            'tipo_vendas_labels': ['Serviços Nimbo', 'Produtos Parceiros'],
+            'tipo_vendas_valores': [itens_servico_count, itens_parceiro_count],
+            'top_produtos_labels': top_produtos_labels,
+            'top_produtos_valores': top_produtos_valores,
+            'top_clientes_labels': top_clientes_labels,
+            'top_clientes_valores': top_clientes_valores,
+        })
+
+    return render(request, 'relatorios.html', context)
