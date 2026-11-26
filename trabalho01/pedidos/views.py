@@ -322,9 +322,12 @@ def meus_pedidos(request):
 @admin_required
 def pedidos_admin(request):
     busca = request.GET.get('busca', '').strip()
+    moeda = request.GET.get('moeda', '').strip()
+    ordem = request.GET.get('ordem', '').strip()
+
     orders = Pedido.objects.select_related('usuario').prefetch_related(
         'items__servico',
-    ).order_by('-criado_em')
+    )
 
     if busca:
         from django.db.models import Q
@@ -337,6 +340,19 @@ def pedidos_admin(request):
             Q(produto_nome__icontains=busca)
         ).distinct()
 
+    if moeda:
+        from django.db.models import Q
+        orders = orders.filter(
+            Q(moeda=moeda) | Q(items__moeda=moeda)
+        ).distinct()
+
+    if ordem == 'antigo':
+        orders = orders.order_by('criado_em')
+    elif ordem == 'cliente':
+        orders = orders.order_by('usuario__first_name', 'usuario__username')
+    else:
+        orders = orders.order_by('-criado_em')
+
     for order in orders:
         totals = {}
         for item in order.items.all():
@@ -348,4 +364,6 @@ def pedidos_admin(request):
     return render(request, 'pedidos_admin.html', {
         'pedidos': orders,
         'busca': busca,
+        'moeda': moeda,
+        'ordem': ordem,
     })

@@ -16,11 +16,11 @@
   </section>
 
   <!-- Filtro e Busca -->
-  <section class="card" style="margin-top: 24px;">
+  <section class="filter-panel">
     <form method="get">
-      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
-        <div>
-          <label for="id_busca">Buscar por cliente ou produto</label>
+      <div class="filter-grid">
+        <div class="filter-field" style="grid-column: span 2;">
+          <label for="id_busca">Buscar cliente ou produto</label>
           <input
             id="id_busca"
             type="text"
@@ -29,12 +29,28 @@
             placeholder="Nome, usuário, email ou item..."
           />
         </div>
-        <div style="align-self: flex-end; display: flex; gap: 12px;">
-          <button type="submit" class="button fill">Filtrar</button>
-          {% if busca %}
-            <a href="{% url 'pedidos_admin' %}" class="button soft">Limpar</a>
-          {% endif %}
+        <div class="filter-field">
+          <label for="id_moeda">Moeda</label>
+          <select id="id_moeda" name="moeda">
+            <option value="">Todas</option>
+            <option value="BRL" {% if moeda == 'BRL' %}selected{% endif %}>Real (BRL - R$)</option>
+            <option value="USD" {% if moeda == 'USD' %}selected{% endif %}>Dólar (USD - US$)</option>
+          </select>
         </div>
+        <div class="filter-field">
+          <label for="id_ordem">Ordenação</label>
+          <select id="id_ordem" name="ordem">
+            <option value="" {% if not ordem %}selected{% endif %}>Mais recentes primeiro</option>
+            <option value="antigo" {% if ordem == 'antigo' %}selected{% endif %}>Mais antigos primeiro</option>
+            <option value="cliente" {% if ordem == 'cliente' %}selected{% endif %}>Nome do cliente (A-Z)</option>
+          </select>
+        </div>
+      </div>
+      <div class="filter-actions">
+        <button type="submit" class="button fill">Filtrar</button>
+        {% if busca or moeda or ordem %}
+          <a href="{% url 'pedidos_admin' %}" class="button soft">Limpar filtros</a>
+        {% endif %}
       </div>
     </form>
   </section>

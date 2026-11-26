@@ -1076,17 +1076,80 @@ tbody tr:last-child td {
   margin: 0;
 }
 
-.product-search {
-  align-items: end;
+.product-search,
+.filter-panel {
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
+  margin: 24px 0 32px;
+  padding: 22px;
+}
+
+.product-search {
+  align-items: end;
   display: grid;
   gap: 16px;
   grid-template-columns: minmax(0, 1fr) minmax(200px, 0.38fr) auto;
-  margin: 24px 0 42px;
-  padding: 22px;
+  margin-bottom: 42px;
+}
+
+.filter-grid {
+  align-items: end;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.filter-field {
+  min-width: 0;
+}
+
+.filter-field label {
+  color: var(--ink);
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 7px;
+}
+
+.filter-field input,
+.filter-field select {
+  min-height: 48px;
+  width: 100%;
+}
+
+.filter-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.filter-actions .button {
+  min-height: 44px;
+  padding: 10px 18px;
+  white-space: nowrap;
+}
+
+.filter-actions .action-right {
+  margin-left: auto;
+}
+
+@media (max-width: 760px) {
+  .filter-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .filter-actions .button,
+  .filter-actions .action-right {
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+  }
 }
 
 .product-search-field,

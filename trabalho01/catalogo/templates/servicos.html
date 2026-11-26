@@ -15,45 +15,53 @@
     </div>
   </section>
 
-  <section class="card" style="margin-top: 28px;">
+  <section class="filter-panel">
     <form method="get">
-      <div class="grid">
-        <div>
-          <label>Busca</label>
-          <input type="text" name="busca" value="{{ busca }}" placeholder="Nome do serviço" />
+      <div class="filter-grid">
+        <div class="filter-field">
+          <label for="id_busca">Busca por nome</label>
+          <input id="id_busca" type="text" name="busca" value="{{ busca }}" placeholder="Ex.: Landing Page, Identidade..." />
         </div>
-        <div>
-          <label>Categoria</label>
-          <select name="categoria">
+        <div class="filter-field">
+          <label for="id_categoria">Categoria</label>
+          <select id="id_categoria" name="categoria">
             <option value="">Todas</option>
-            {% for categoria in categorias %}
-              <option value="{{ categoria.id }}" {% if categoria.id|stringformat:'s' == categoria %}selected{% endif %}>{{ categoria.nome }}</option>
+            {% for cat in categorias %}
+              <option value="{{ cat.id }}" {% if cat.id|stringformat:'s' == categoria %}selected{% endif %}>{{ cat.nome }}</option>
             {% endfor %}
           </select>
         </div>
-        <div>
-          <label>Faixa de preço</label>
-          <select name="preco">
+        <div class="filter-field">
+          <label for="id_preco">Faixa de preço</label>
+          <select id="id_preco" name="preco">
             <option value="">Qualquer valor</option>
             <option value="baixo" {% if preco == 'baixo' %}selected{% endif %}>Até R$ 50</option>
             <option value="medio" {% if preco == 'medio' %}selected{% endif %}>R$ 51 a R$ 250</option>
             <option value="alto" {% if preco == 'alto' %}selected{% endif %}>Acima de R$ 250</option>
           </select>
         </div>
-        <div>
-          <label>Ordenação</label>
-          <select name="ordem">
+        <div class="filter-field">
+          <label for="id_ordem">Ordenação</label>
+          <select id="id_ordem" name="ordem">
             <option value="">Padrão</option>
-            <option value="nome" {% if ordem == 'nome' %}selected{% endif %}>Nome</option>
+            <option value="nome" {% if ordem == 'nome' %}selected{% endif %}>Nome (A-Z)</option>
             <option value="menor" {% if ordem == 'menor' %}selected{% endif %}>Menor preço</option>
             <option value="maior" {% if ordem == 'maior' %}selected{% endif %}>Maior preço</option>
           </select>
         </div>
       </div>
-      <div style="margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap;">
+      <div class="filter-actions">
         <button type="submit" class="button fill">Filtrar</button>
-        <a href="{% url 'servicos_admin' %}" class="button soft">Limpar filtros</a>
-        <a href="{% url 'add_servico' %}" class="button fill">Adicionar</a>
+        {% if busca or categoria or preco or ordem %}
+          <a href="{% url 'servicos_admin' %}" class="button soft">Limpar filtros</a>
+        {% endif %}
+        <a href="{% url 'add_servico' %}" class="button fill action-right">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 4px; vertical-align: middle;">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Adicionar Serviço
+        </a>
       </div>
     </form>
   </section>
