@@ -14,6 +14,7 @@ CARDS_CLIENTE = [
 
 CARDS_ADMIN = [
     {'tag': 'perfil', 'title': 'Editar Perfil', 'text': 'Atualize seus dados pessoais.', 'url': 'perfil_contas'},
+    {'tag': 'pedidos', 'title': 'Pedidos dos Clientes', 'text': 'Visualize todos os pedidos realizados pelos clientes.', 'url': 'pedidos_admin'},
     {'tag': 'contatos', 'title': 'Contatos', 'text': 'Veja e gerencie mensagens recebidas.', 'url': 'contatos_admin'},
     {'tag': 'servicos', 'title': 'Serviços', 'text': 'Cadastre, edite e filtre serviços.', 'url': 'servicos_admin'},
     {'tag': 'equipe', 'title': 'Equipe', 'text': 'Gerencie os integrantes do time.', 'url': 'integrantes_admin'},

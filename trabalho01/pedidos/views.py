@@ -12,6 +12,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 
 from catalogo.models import Servico
+from contas.permissions import admin_required
 from .models import Pedido, PedidoItem
 
 logger = logging.getLogger(__name__)
@@ -315,4 +316,36 @@ def meus_pedidos(request):
         order.totais = totals
     return render(request, 'meus_pedidos.html', {
         'pedidos': orders,
+    })
+
+
+@admin_required
+def pedidos_admin(request):
+    busca = request.GET.get('busca', '').strip()
+    orders = Pedido.objects.select_related('usuario').prefetch_related(
+        'items__servico',
+    ).order_by('-criado_em')
+
+    if busca:
+        from django.db.models import Q
+        orders = orders.filter(
+            Q(usuario__username__icontains=busca) |
+            Q(usuario__first_name__icontains=busca) |
+            Q(usuario__last_name__icontains=busca) |
+            Q(usuario__email__icontains=busca) |
+            Q(items__nome__icontains=busca) |
+            Q(produto_nome__icontains=busca)
+        ).distinct()
+
+    for order in orders:
+        totals = {}
+        for item in order.items.all():
+            totals[item.moeda] = totals.get(item.moeda, Decimal('0.00')) + item.subtotal
+        if not order.items.exists():
+            totals[order.moeda] = order.preco
+        order.totais = totals
+
+    return render(request, 'pedidos_admin.html', {
+        'pedidos': orders,
+        'busca': busca,
     })
