@@ -85,3 +85,29 @@ class ContasTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertIn('usuario_reset@exemplo.com', mail.outbox[0].to)
         self.assertIn('/contas/reset/', mail.outbox[0].body)
+
+        # Extrair link gerado no e-mail e redefinir a senha
+        import re
+        match = re.search(r'http://testserver(/contas/reset/[^ \n]+)', mail.outbox[0].body)
+        self.assertIsNotNone(match)
+        reset_url = match.group(1)
+
+        # GET no link de redefinição segue o redirecionamento de sessão interna do Django
+        get_confirm = self.client.get(reset_url, follow=True)
+        self.assertEqual(get_confirm.status_code, 200)
+
+        # POST definindo a nova senha
+        post_confirm = self.client.post(
+            get_confirm.request['PATH_INFO'],
+            {
+                'new_password1': 'NovaSenhaSegura-2026!',
+                'new_password2': 'NovaSenhaSegura-2026!',
+            },
+            follow=True,
+        )
+        self.assertEqual(post_confirm.status_code, 200)
+        self.assertRedirects(post_confirm, reverse('password_reset_complete'))
+
+        # Validar que a senha foi alterada com sucesso
+        user.refresh_from_db()
+        self.assertTrue(user.check_password('NovaSenhaSegura-2026!'))
