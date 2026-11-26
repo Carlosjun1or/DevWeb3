@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core import mail
 from django.test import TestCase
 from django.urls import reverse
 
@@ -67,3 +68,20 @@ class ContasTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Não foi possível concluir o cadastro. Verifique os campos destacados.')
         self.assertFalse(get_user_model().objects.filter(username='usuario_ruim').exists())
+
+    def test_recuperacao_senha_envia_email_com_link_de_redefinicao(self):
+        user = get_user_model().objects.create_user(
+            username='usuario_reset',
+            email='usuario_reset@exemplo.com',
+            password='senhaAntiga123!',
+        )
+        response = self.client.post(
+            reverse('password_reset'),
+            {'email': 'usuario_reset@exemplo.com'},
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, reverse('password_reset_done'))
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn('usuario_reset@exemplo.com', mail.outbox[0].to)
+        self.assertIn('/contas/reset/', mail.outbox[0].body)
